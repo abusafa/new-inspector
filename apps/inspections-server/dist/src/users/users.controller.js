@@ -20,6 +20,12 @@ let UsersController = class UsersController {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async list() {
+        const users = await this.prisma.user.findMany({
+            orderBy: { createdAt: 'desc' },
+        });
+        return users;
+    }
     async get(id) {
         return this.prisma.user.findUnique({ where: { id } });
     }
@@ -28,13 +34,59 @@ let UsersController = class UsersController {
         const name = getNameFromPhone(phone);
         const user = await this.prisma.user.upsert({
             where: { phoneNumber: phone },
-            update: { name },
-            create: { phoneNumber: phone, name, role: 'Inspector' },
+            update: { name, loginTime: new Date() },
+            create: { phoneNumber: phone, name, role: 'Inspector', loginTime: new Date() },
         });
         return user;
     }
+    async create(body) {
+        const user = await this.prisma.user.create({
+            data: {
+                phoneNumber: body.phoneNumber,
+                name: body.name,
+                role: body.role || 'Inspector',
+                email: body.email,
+                department: body.department,
+                location: body.location,
+                employeeId: body.employeeId,
+                supervisor: body.supervisor,
+                loginTime: new Date(),
+                settings: body.settings || {},
+            },
+        });
+        return user;
+    }
+    async update(id, body) {
+        const user = await this.prisma.user.update({
+            where: { id },
+            data: {
+                phoneNumber: body.phoneNumber,
+                name: body.name,
+                role: body.role,
+                email: body.email,
+                department: body.department,
+                location: body.location,
+                employeeId: body.employeeId,
+                supervisor: body.supervisor,
+                settings: body.settings,
+            },
+        });
+        return user;
+    }
+    async delete(id) {
+        await this.prisma.user.delete({
+            where: { id },
+        });
+        return { success: true };
+    }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "list", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -49,6 +101,28 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "delete", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])

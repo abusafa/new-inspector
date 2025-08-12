@@ -2,6 +2,39 @@ import { PrismaService } from '../prisma.service';
 export declare class InspectionsController {
     private readonly prisma;
     constructor(prisma: PrismaService);
+    list(): Promise<{
+        id: string;
+        inspectionId: string;
+        workOrderId: string;
+        templateId: string;
+        status: string;
+        required: boolean;
+        order: number;
+        completedAt: Date | null;
+        resultJson: import("@prisma/client/runtime/library").JsonValue;
+        template: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            templateId: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
+        };
+        workOrder: {
+            id: string;
+            location: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string;
+            workOrderId: string;
+            title: string;
+            dueDate: Date | null;
+            status: string;
+            assignedTo: string;
+            priority: string;
+        };
+    }[]>;
     get(id: string): Promise<{
         inspection_id: string;
         template_id: string;

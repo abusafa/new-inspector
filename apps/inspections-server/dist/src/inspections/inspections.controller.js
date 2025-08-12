@@ -20,6 +20,25 @@ let InspectionsController = class InspectionsController {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async list() {
+        const items = await this.prisma.inspection.findMany({
+            orderBy: { order: 'asc' },
+            include: { template: true, workOrder: true },
+        });
+        return items.map((i) => ({
+            id: i.id,
+            inspectionId: i.inspectionId,
+            workOrderId: i.workOrderId,
+            templateId: i.templateId,
+            status: i.status,
+            required: i.required,
+            order: i.order,
+            completedAt: i.completedAt,
+            resultJson: i.resultJson,
+            template: i.template,
+            workOrder: i.workOrder,
+        }));
+    }
     async get(id) {
         const i = await this.prisma.inspection.findUnique({
             where: { id },
@@ -55,6 +74,12 @@ let InspectionsController = class InspectionsController {
     }
 };
 exports.InspectionsController = InspectionsController;
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], InspectionsController.prototype, "list", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

@@ -23,12 +23,15 @@ let TemplatesController = class TemplatesController {
     async list() {
         const items = await this.prisma.inspectionTemplate.findMany({
             orderBy: { createdAt: 'desc' },
-            select: { id: true, name: true, description: true },
         });
         return items.map((t) => ({
             id: t.id,
+            templateId: t.templateId,
             name: t.name,
             description: t.description,
+            schemaJson: t.schemaJson,
+            createdAt: t.createdAt,
+            updatedAt: t.updatedAt,
         }));
     }
     async get(id) {
@@ -37,10 +40,60 @@ let TemplatesController = class TemplatesController {
             return null;
         return {
             id: item.id,
+            templateId: item.templateId,
             name: item.name,
             description: item.description,
-            schema: item.schemaJson,
+            schemaJson: item.schemaJson,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
         };
+    }
+    async create(body) {
+        const template = await this.prisma.inspectionTemplate.create({
+            data: {
+                templateId: body.templateId || `TPL-${Date.now()}`,
+                name: body.name,
+                description: body.description,
+                schemaJson: body.schemaJson || {},
+            },
+        });
+        return {
+            id: template.id,
+            templateId: template.templateId,
+            name: template.name,
+            description: template.description,
+            schemaJson: template.schemaJson,
+            createdAt: template.createdAt,
+            updatedAt: template.updatedAt,
+        };
+    }
+    async update(id, body) {
+        const template = await this.prisma.inspectionTemplate.update({
+            where: { id },
+            data: {
+                name: body.name,
+                description: body.description,
+                schemaJson: body.schemaJson,
+            },
+        });
+        return {
+            id: template.id,
+            templateId: template.templateId,
+            name: template.name,
+            description: template.description,
+            schemaJson: template.schemaJson,
+            createdAt: template.createdAt,
+            updatedAt: template.updatedAt,
+        };
+    }
+    async delete(id) {
+        await this.prisma.inspection.deleteMany({
+            where: { templateId: id },
+        });
+        await this.prisma.inspectionTemplate.delete({
+            where: { id },
+        });
+        return { success: true };
     }
 };
 exports.TemplatesController = TemplatesController;
@@ -57,6 +110,28 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TemplatesController.prototype, "get", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], TemplatesController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], TemplatesController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TemplatesController.prototype, "delete", null);
 exports.TemplatesController = TemplatesController = __decorate([
     (0, common_1.Controller)('templates'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])

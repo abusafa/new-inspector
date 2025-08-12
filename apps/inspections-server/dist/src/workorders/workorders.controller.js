@@ -31,25 +31,28 @@ let WorkOrdersController = class WorkOrdersController {
             },
         });
         return items.map((wo) => ({
-            work_order_id: wo.id,
+            id: wo.id,
+            workOrderId: wo.workOrderId,
             title: wo.title,
             description: wo.description,
-            created_at: wo.createdAt,
-            due_date: wo.dueDate ?? undefined,
+            createdAt: wo.createdAt,
+            updatedAt: wo.updatedAt,
+            dueDate: wo.dueDate ?? undefined,
             status: wo.status,
-            assigned_to: wo.assignedTo,
+            assignedTo: wo.assignedTo,
             location: wo.location ?? undefined,
             priority: wo.priority,
             inspections: wo.inspections.map((i) => ({
-                inspection_id: i.id,
-                template_id: i.templateId,
-                template_name: i.template?.name ?? 'Template',
-                template_description: i.template?.description ?? '',
+                id: i.id,
+                inspectionId: i.inspectionId,
+                workOrderId: i.workOrderId,
+                templateId: i.templateId,
                 status: i.status,
                 required: i.required,
-                completed_at: i.completedAt ?? undefined,
-                result: i.resultJson ?? undefined,
                 order: i.order,
+                completedAt: i.completedAt ?? undefined,
+                resultJson: i.resultJson ?? undefined,
+                template: i.template,
             })),
         }));
     }
@@ -63,31 +66,129 @@ let WorkOrdersController = class WorkOrdersController {
         if (!wo)
             return null;
         return {
-            work_order_id: wo.id,
+            id: wo.id,
+            workOrderId: wo.workOrderId,
             title: wo.title,
             description: wo.description,
-            created_at: wo.createdAt,
-            due_date: wo.dueDate ?? undefined,
+            createdAt: wo.createdAt,
+            updatedAt: wo.updatedAt,
+            dueDate: wo.dueDate ?? undefined,
             status: wo.status,
-            assigned_to: wo.assignedTo,
+            assignedTo: wo.assignedTo,
             location: wo.location ?? undefined,
             priority: wo.priority,
             inspections: wo.inspections.map((i) => ({
-                inspection_id: i.id,
-                template_id: i.templateId,
-                template_name: i.template?.name ?? 'Template',
-                template_description: i.template?.description ?? '',
+                id: i.id,
+                inspectionId: i.inspectionId,
+                workOrderId: i.workOrderId,
+                templateId: i.templateId,
                 status: i.status,
                 required: i.required,
-                completed_at: i.completedAt ?? undefined,
-                result: i.resultJson ?? undefined,
                 order: i.order,
+                completedAt: i.completedAt ?? undefined,
+                resultJson: i.resultJson ?? undefined,
+                template: i.template,
             })),
         };
     }
     async create(body) {
-        const created = await this.prisma.workOrder.create({ data: body });
-        return created;
+        const workOrder = await this.prisma.workOrder.create({
+            data: {
+                workOrderId: body.workOrderId || `WO-${Date.now()}`,
+                title: body.title,
+                description: body.description,
+                status: body.status || 'pending',
+                priority: body.priority || 'medium',
+                assignedTo: body.assignedTo,
+                location: body.location,
+                dueDate: body.dueDate ? new Date(body.dueDate) : null,
+            },
+            include: {
+                inspections: {
+                    orderBy: { order: 'asc' },
+                    include: { template: true },
+                },
+            },
+        });
+        return {
+            id: workOrder.id,
+            workOrderId: workOrder.workOrderId,
+            title: workOrder.title,
+            description: workOrder.description,
+            createdAt: workOrder.createdAt,
+            updatedAt: workOrder.updatedAt,
+            dueDate: workOrder.dueDate ?? undefined,
+            status: workOrder.status,
+            assignedTo: workOrder.assignedTo,
+            location: workOrder.location ?? undefined,
+            priority: workOrder.priority,
+            inspections: workOrder.inspections.map((i) => ({
+                id: i.id,
+                inspectionId: i.inspectionId,
+                workOrderId: i.workOrderId,
+                templateId: i.templateId,
+                status: i.status,
+                required: i.required,
+                order: i.order,
+                completedAt: i.completedAt ?? undefined,
+                resultJson: i.resultJson ?? undefined,
+                template: i.template,
+            })),
+        };
+    }
+    async update(id, body) {
+        const workOrder = await this.prisma.workOrder.update({
+            where: { id },
+            data: {
+                title: body.title,
+                description: body.description,
+                status: body.status,
+                priority: body.priority,
+                assignedTo: body.assignedTo,
+                location: body.location,
+                dueDate: body.dueDate ? new Date(body.dueDate) : null,
+            },
+            include: {
+                inspections: {
+                    orderBy: { order: 'asc' },
+                    include: { template: true },
+                },
+            },
+        });
+        return {
+            id: workOrder.id,
+            workOrderId: workOrder.workOrderId,
+            title: workOrder.title,
+            description: workOrder.description,
+            createdAt: workOrder.createdAt,
+            updatedAt: workOrder.updatedAt,
+            dueDate: workOrder.dueDate ?? undefined,
+            status: workOrder.status,
+            assignedTo: workOrder.assignedTo,
+            location: workOrder.location ?? undefined,
+            priority: workOrder.priority,
+            inspections: workOrder.inspections.map((i) => ({
+                id: i.id,
+                inspectionId: i.inspectionId,
+                workOrderId: i.workOrderId,
+                templateId: i.templateId,
+                status: i.status,
+                required: i.required,
+                order: i.order,
+                completedAt: i.completedAt ?? undefined,
+                resultJson: i.resultJson ?? undefined,
+                template: i.template,
+            })),
+        };
+    }
+    async delete(id) {
+        await this.prisma.inspection.deleteMany({
+            where: { workOrderId: id },
+        });
+        await this.prisma.workOrder.delete({
+            where: { id },
+        });
+        return { success: true };
     }
 };
 exports.WorkOrdersController = WorkOrdersController;
@@ -111,6 +212,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], WorkOrdersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], WorkOrdersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WorkOrdersController.prototype, "delete", null);
 exports.WorkOrdersController = WorkOrdersController = __decorate([
     (0, common_1.Controller)('work-orders'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])

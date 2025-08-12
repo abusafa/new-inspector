@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
 @Controller('work-orders')
@@ -16,26 +16,29 @@ export class WorkOrdersController {
         },
       },
     });
-    return items.map((wo) => ({
-      work_order_id: wo.id,
+    return items.map((wo: any) => ({
+      id: wo.id,
+      workOrderId: wo.workOrderId,
       title: wo.title,
       description: wo.description,
-      created_at: wo.createdAt,
-      due_date: wo.dueDate ?? undefined,
-      status: wo.status as any,
-      assigned_to: wo.assignedTo,
+      createdAt: wo.createdAt,
+      updatedAt: wo.updatedAt,
+      dueDate: wo.dueDate ?? undefined,
+      status: wo.status,
+      assignedTo: wo.assignedTo,
       location: wo.location ?? undefined,
-      priority: wo.priority as any,
-      inspections: wo.inspections.map((i) => ({
-        inspection_id: i.id,
-        template_id: i.templateId,
-        template_name: i.template?.name ?? 'Template',
-        template_description: i.template?.description ?? '',
-        status: i.status as any,
+      priority: wo.priority,
+      inspections: wo.inspections.map((i: any) => ({
+        id: i.id,
+        inspectionId: i.inspectionId,
+        workOrderId: i.workOrderId,
+        templateId: i.templateId,
+        status: i.status,
         required: i.required,
-        completed_at: i.completedAt ?? undefined,
-        result: i.resultJson ?? undefined,
         order: i.order,
+        completedAt: i.completedAt ?? undefined,
+        resultJson: i.resultJson ?? undefined,
+        template: i.template,
       })),
     }));
   }
@@ -50,34 +53,141 @@ export class WorkOrdersController {
     });
     if (!wo) return null;
     return {
-      work_order_id: wo.id,
+      id: wo.id,
+      workOrderId: wo.workOrderId,
       title: wo.title,
       description: wo.description,
-      created_at: wo.createdAt,
-      due_date: wo.dueDate ?? undefined,
-      status: wo.status as any,
-      assigned_to: wo.assignedTo,
+      createdAt: wo.createdAt,
+      updatedAt: wo.updatedAt,
+      dueDate: wo.dueDate ?? undefined,
+      status: wo.status,
+      assignedTo: wo.assignedTo,
       location: wo.location ?? undefined,
-      priority: wo.priority as any,
-      inspections: wo.inspections.map((i) => ({
-        inspection_id: i.id,
-        template_id: i.templateId,
-        template_name: i.template?.name ?? 'Template',
-        template_description: i.template?.description ?? '',
-        status: i.status as any,
+      priority: wo.priority,
+      inspections: wo.inspections.map((i: any) => ({
+        id: i.id,
+        inspectionId: i.inspectionId,
+        workOrderId: i.workOrderId,
+        templateId: i.templateId,
+        status: i.status,
         required: i.required,
-        completed_at: i.completedAt ?? undefined,
-        result: i.resultJson ?? undefined,
         order: i.order,
+        completedAt: i.completedAt ?? undefined,
+        resultJson: i.resultJson ?? undefined,
+        template: i.template,
       })),
     };
   }
 
   @Post()
   async create(@Body() body: any) {
-    // Expecting create payload with camelCase fields matching prisma
-    const created = await this.prisma.workOrder.create({ data: body });
-    return created;
+    const workOrder = await this.prisma.workOrder.create({
+      data: {
+        workOrderId: body.workOrderId || `WO-${Date.now()}`,
+        title: body.title,
+        description: body.description,
+        status: body.status || 'pending',
+        priority: body.priority || 'medium',
+        assignedTo: body.assignedTo,
+        location: body.location,
+        dueDate: body.dueDate ? new Date(body.dueDate) : null,
+      },
+      include: {
+        inspections: {
+          orderBy: { order: 'asc' },
+          include: { template: true },
+        },
+      },
+    });
+
+    return {
+      id: workOrder.id,
+      workOrderId: workOrder.workOrderId,
+      title: workOrder.title,
+      description: workOrder.description,
+      createdAt: workOrder.createdAt,
+      updatedAt: workOrder.updatedAt,
+      dueDate: workOrder.dueDate ?? undefined,
+      status: workOrder.status,
+      assignedTo: workOrder.assignedTo,
+      location: workOrder.location ?? undefined,
+      priority: workOrder.priority,
+      inspections: workOrder.inspections.map((i: any) => ({
+        id: i.id,
+        inspectionId: i.inspectionId,
+        workOrderId: i.workOrderId,
+        templateId: i.templateId,
+        status: i.status,
+        required: i.required,
+        order: i.order,
+        completedAt: i.completedAt ?? undefined,
+        resultJson: i.resultJson ?? undefined,
+        template: i.template,
+      })),
+    };
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    const workOrder = await this.prisma.workOrder.update({
+      where: { id },
+      data: {
+        title: body.title,
+        description: body.description,
+        status: body.status,
+        priority: body.priority,
+        assignedTo: body.assignedTo,
+        location: body.location,
+        dueDate: body.dueDate ? new Date(body.dueDate) : null,
+      },
+      include: {
+        inspections: {
+          orderBy: { order: 'asc' },
+          include: { template: true },
+        },
+      },
+    });
+
+    return {
+      id: workOrder.id,
+      workOrderId: workOrder.workOrderId,
+      title: workOrder.title,
+      description: workOrder.description,
+      createdAt: workOrder.createdAt,
+      updatedAt: workOrder.updatedAt,
+      dueDate: workOrder.dueDate ?? undefined,
+      status: workOrder.status,
+      assignedTo: workOrder.assignedTo,
+      location: workOrder.location ?? undefined,
+      priority: workOrder.priority,
+      inspections: workOrder.inspections.map((i: any) => ({
+        id: i.id,
+        inspectionId: i.inspectionId,
+        workOrderId: i.workOrderId,
+        templateId: i.templateId,
+        status: i.status,
+        required: i.required,
+        order: i.order,
+        completedAt: i.completedAt ?? undefined,
+        resultJson: i.resultJson ?? undefined,
+        template: i.template,
+      })),
+    };
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    // First delete related inspections
+    await this.prisma.inspection.deleteMany({
+      where: { workOrderId: id },
+    });
+
+    // Then delete the work order
+    await this.prisma.workOrder.delete({
+      where: { id },
+    });
+
+    return { success: true };
   }
 }
 

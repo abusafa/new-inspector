@@ -5,6 +5,27 @@ import { PrismaService } from '../prisma.service';
 export class InspectionsController {
   constructor(private readonly prisma: PrismaService) {}
 
+  @Get()
+  async list() {
+    const items = await this.prisma.inspection.findMany({
+      orderBy: { order: 'asc' },
+      include: { template: true, workOrder: true },
+    });
+    return items.map((i) => ({
+      id: i.id,
+      inspectionId: i.inspectionId,
+      workOrderId: i.workOrderId,
+      templateId: i.templateId,
+      status: i.status,
+      required: i.required,
+      order: i.order,
+      completedAt: i.completedAt,
+      resultJson: i.resultJson,
+      template: i.template,
+      workOrder: i.workOrder,
+    }));
+  }
+
   @Get(':id')
   async get(@Param('id') id: string) {
     const i = await this.prisma.inspection.findUnique({
