@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'description' not found in type: 'api_mobile_templates'",
+      "extensions": {
+        "path": "$.selectionSet.api_mobile_templates.selectionSet.description",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

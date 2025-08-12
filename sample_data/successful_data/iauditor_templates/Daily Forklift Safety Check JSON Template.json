@@ -1,0 +1,155 @@
+{
+  "template_id": "template_1a2b3c4d5e6f7g8h",
+  "name": "Daily Forklift Safety Check",
+  "description": "A pre-use checklist to ensure the forklift is safe for operation, to be completed at the start of each shift.",
+  "header_items": [
+    {
+      "item_id": "item_header_001",
+      "type": "datetime",
+      "label": "Date and Time of Inspection",
+      "options": {
+        "required": true,
+        "default_to_current_time": true
+      }
+    },
+    {
+      "item_id": "item_header_002",
+      "type": "text",
+      "label": "Inspector Name",
+      "options": {
+        "required": true
+      }
+    },
+    {
+      "item_id": "item_header_003",
+      "type": "text",
+      "label": "Forklift ID / Serial Number",
+      "options": {
+        "required": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "item_id": "section_001",
+      "type": "section",
+      "label": "Pre-Operation Check (Engine Off)",
+      "items": [
+        {
+          "item_id": "question_001",
+          "type": "question",
+          "label": "Tires in good condition (no major cuts, gouges, or low pressure)?",
+          "options": {
+            "required": true
+          },
+          "response_set": {
+            "type": "multiple-choice",
+            "responses": [
+              { "id": "resp_yes", "label": "Yes", "score": 1, "color": "green" },
+              { "id": "resp_no", "label": "No", "score": 0, "color": "red" },
+              { "id": "resp_na", "label": "N/A", "score": null, "color": "grey" }
+            ]
+          }
+        },
+        {
+          "item_id": "question_002",
+          "type": "question",
+          "label": "Forks, mast, and overhead guard are not damaged or cracked?",
+          "options": {
+            "required": true
+          },
+          "response_set": {
+            "type": "multiple-choice",
+            "responses": [
+              { "id": "resp_yes", "label": "Yes", "score": 1, "color": "green" },
+              { "id": "resp_no", "label": "No", "score": 0, "color": "red" }
+            ]
+          }
+        },
+        {
+          "item_id": "question_003_logic_parent",
+          "type": "question",
+          "label": "Any signs of fluid leaks (oil, coolant, hydraulic fluid)?",
+          "options": {
+            "required": true
+          },
+          "response_set": {
+            "type": "multiple-choice",
+            "responses": [
+              { "id": "resp_no_leaks", "label": "No", "score": 1, "color": "green" },
+              { "id": "resp_yes_leaks", "label": "Yes", "score": 0, "color": "red" }
+            ]
+          }
+        },
+        {
+          "item_id": "question_003a_logic_child",
+          "type": "text",
+          "label": "Describe the leak location and severity. (Add Photo)",
+          "parent_id": "question_003_logic_parent",
+          "options": {
+            "allow_photos": true
+          },
+          "conditions": [
+            {
+              "field": "response",
+              "operator": "is",
+              "value": "resp_yes_leaks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "item_id": "section_002",
+      "type": "section",
+      "label": "Operational Check (Engine On)",
+      "items": [
+        {
+          "item_id": "question_004",
+          "type": "question",
+          "label": "Horn, lights, and backup alarm are working correctly?",
+          "options": {
+            "required": true
+          },
+          "response_set": {
+            "type": "multiple-choice",
+            "responses": [
+              { "id": "resp_yes", "label": "Yes", "score": 1, "color": "green" },
+              { "id": "resp_no", "label": "No", "score": 0, "color": "red" }
+            ]
+          }
+        },
+        {
+          "item_id": "question_005",
+          "type": "question",
+          "label": "Steering and braking systems are responsive?",
+          "options": {
+            "required": true
+          },
+          "response_set": {
+            "type": "multiple-choice",
+            "responses": [
+              { "id": "resp_yes", "label": "Yes", "score": 1, "color": "green" },
+              { "id": "resp_no", "label": "No", "score": 0, "color": "red" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "section_003",
+      "type": "section",
+      "label": "Final Sign-off",
+      "items": [
+        {
+          "item_id": "signature_001",
+          "type": "signature",
+          "label": "Inspector Signature",
+          "options": {
+            "required": true
+          }
+        }
+      ]
+    }
+  ]
+}

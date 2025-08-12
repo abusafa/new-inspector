@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'item_name' not found in type: 'workorder_details'",
+      "extensions": {
+        "path": "$.selectionSet.workorder_details.selectionSet.item_name",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

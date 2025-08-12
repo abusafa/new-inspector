@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "id": "tmpl-vehicle-001",
+    "name": "Vehicle Pre-Trip Inspection",
+    "version": 1,
+    "locale": "en"
+  },
+  "response_sets": {
+    "rs_pass_fail_na": {
+      "type": "single",
+      "options": [
+        { "id": "pass", "label": "Pass" },
+        { "id": "fail", "label": "Fail" },
+        { "id": "na", "label": "N/A" }
+      ],
+      "fail_ids": ["fail"]
+    }
+  },
+  "sections": [
+    {
+      "id": "sec-1",
+      "label": "Exterior",
+      "items": [
+        {
+          "id": "q-1",
+          "type": "choice",
+          "label": "Headlights operational",
+          "response_set_id": "rs_pass_fail_na",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "pass": 1, "fail": 0, "na": 0 }
+        },
+        {
+          "id": "q-2",
+          "type": "choice",
+          "label": "Brake lights operational",
+          "response_set_id": "rs_pass_fail_na",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "pass": 1, "fail": 0, "na": 0 }
+        }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "label": "Safety Equipment",
+      "items": [
+        {
+          "id": "q-3",
+          "type": "choice",
+          "label": "Fire extinguisher present and in date",
+          "response_set_id": "rs_pass_fail_na",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "pass": 1, "fail": 0, "na": 0 },
+          "logic": [
+            { "when": { "equals": { "response_id": "fail" } }, "require": ["photo", "notes"] }
+          ]
+        },
+        { "id": "q-4", "type": "text", "label": "Additional notes" }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "label": "Mechanical",
+      "items": [
+        {
+          "id": "q-5",
+          "type": "number",
+          "label": "Tire pressure (front left, PSI)",
+          "min": 28,
+          "max": 40,
+          "units": "PSI"
+        },
+        {
+          "id": "q-6",
+          "type": "number",
+          "label": "Tire pressure (front right, PSI)",
+          "min": 28,
+          "max": 40,
+          "units": "PSI"
+        }
+      ]
+    }
+  ],
+  "scoring": { "method": "sum", "max": 3 }
+}
+
+

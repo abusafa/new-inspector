@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'operation_push_notification_view' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.operation_push_notification_view",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

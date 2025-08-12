@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'school_search' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.school_search",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

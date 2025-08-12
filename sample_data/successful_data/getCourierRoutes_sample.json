@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'etl_routes' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.etl_routes",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

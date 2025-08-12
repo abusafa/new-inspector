@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'contracts_meeting_approvals' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.contracts_meeting_approvals",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

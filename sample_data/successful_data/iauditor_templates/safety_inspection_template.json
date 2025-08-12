@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "id": "tmpl-safety-001",
+    "name": "General Safety Inspection",
+    "version": 1,
+    "locale": "en"
+  },
+  "response_sets": {
+    "rs_pass_fail_na": {
+      "type": "single",
+      "options": [
+        { "id": "pass", "label": "Pass" },
+        { "id": "fail", "label": "Fail" },
+        { "id": "na", "label": "N/A" }
+      ],
+      "fail_ids": ["fail"]
+    },
+    "rs_priority": {
+      "type": "single",
+      "options": [
+        { "id": "low", "label": "Low" },
+        { "id": "medium", "label": "Medium" },
+        { "id": "high", "label": "High" }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "sec-1",
+      "label": "Housekeeping",
+      "items": [
+        {
+          "id": "q-1",
+          "type": "choice",
+          "label": "Walkways clear of obstructions",
+          "response_set_id": "rs_pass_fail_na",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "pass": 1, "fail": 0, "na": 0 },
+          "logic": [
+            { "when": { "equals": { "response_id": "fail" } }, "require": ["photo", "notes"] }
+          ]
+        },
+        { "id": "q-2", "type": "photo", "label": "Attach photos of any obstructions (optional)" }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "label": "Fire Safety",
+      "items": [
+        {
+          "id": "q-3",
+          "type": "choice",
+          "label": "Extinguishers accessible and inspected",
+          "response_set_id": "rs_pass_fail_na",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "pass": 1, "fail": 0, "na": 0 }
+        },
+        { "id": "q-4", "type": "text", "label": "Notes" }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "label": "Actions",
+      "items": [
+        {
+          "id": "q-5",
+          "type": "action",
+          "label": "Create corrective action",
+          "defaults": { "priority": "high" },
+          "binds_to_failed_items": true
+        }
+      ]
+    }
+  ],
+  "scoring": { "method": "sum", "max": 2 }
+}
+
+

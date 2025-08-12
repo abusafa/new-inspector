@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'notifications' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.notifications",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

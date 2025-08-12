@@ -1,0 +1,1926 @@
+{
+  "queries": [
+    {
+      "name": "answers_as_rows",
+      "description": "fetch data from the table: \"answers_as_rows\"",
+      "type": "[answers_as_rows!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[answers_as_rows_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[answers_as_rows_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "answers_as_rows_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_bus",
+      "description": "fetch data from the table: \"api_mobile_bus\"",
+      "type": "[api_mobile_bus!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_bus_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_bus_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_inspections",
+      "description": "fetch data from the table: \"api_mobile_inspections\"",
+      "type": "[api_mobile_inspections!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_inspections_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_inspections_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_inspections_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_templates",
+      "description": "fetch data from the table: \"api_mobile_templates\"",
+      "type": "[api_mobile_templates!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_templates_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_templates_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_workorders",
+      "description": "fetch data from the table: \"api_mobile_workorders\"",
+      "type": "[api_mobile_workorders!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_workorders_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_workorders_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "bus",
+      "description": "fetch data from the table: \"bus\"",
+      "type": "[bus!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[bus_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[bus_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "bus_by_pk",
+      "description": "fetch data from the table: \"bus\" using primary key columns",
+      "type": "bus",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "dashboard_mobile_view",
+      "description": "fetch data from the table: \"dashboard_mobile_view\"",
+      "type": "[dashboard_mobile_view!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[dashboard_mobile_view_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[dashboard_mobile_view_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "dashboard_mobile_view_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "domain_reason",
+      "description": "fetch data from the table: \"domain_reason\"",
+      "type": "[domain_reason!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[domain_reason_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[domain_reason_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "domain_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "domain_reason_by_pk",
+      "description": "fetch data from the table: \"domain_reason\" using primary key columns",
+      "type": "domain_reason",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "drivers",
+      "description": "fetch data from the table: \"drivers\"",
+      "type": "[drivers!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[drivers_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[drivers_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "drivers_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "drivers_by_pk",
+      "description": "fetch data from the table: \"drivers\" using primary key columns",
+      "type": "drivers",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "employee_push",
+      "description": "fetch data from the table: \"employee_push\"",
+      "type": "[employee_push!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[employee_push_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[employee_push_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "employee_push_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "examination_templates",
+      "description": "fetch data from the table: \"examination_templates\"",
+      "type": "[examination_templates!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[examination_templates_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[examination_templates_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "examination_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "examination_templates_by_pk",
+      "description": "fetch data from the table: \"examination_templates\" using primary key columns",
+      "type": "examination_templates",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "mobile_dashboard",
+      "description": "fetch data from the table: \"mobile_dashboard\"",
+      "type": "[mobile_dashboard!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[mobile_dashboard_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[mobile_dashboard_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "mobile_dashboard_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "mobile_dashboard_by_pk",
+      "description": "fetch data from the table: \"mobile_dashboard\" using primary key columns",
+      "type": "mobile_dashboard",
+      "args": [
+        {
+          "name": "id",
+          "type": "Int!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "mobile_reason",
+      "description": "fetch data from the table: \"mobile_reason\"",
+      "type": "[mobile_reason!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[mobile_reason_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[mobile_reason_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "mobile_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "templates_per_school",
+      "description": "fetch data from the table: \"templates_per_school\"",
+      "type": "[templates_per_school!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[templates_per_school_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[templates_per_school_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "templates_per_school_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorder_details",
+      "description": "fetch data from the table: \"workorder_details\"",
+      "type": "[workorder_details!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[workorder_details_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[workorder_details_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "workorder_details_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorder_details_by_pk",
+      "description": "fetch data from the table: \"workorder_details\" using primary key columns",
+      "type": "workorder_details",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "workorders",
+      "description": "fetch data from the table: \"workorders\"",
+      "type": "[workorders!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[workorders_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[workorders_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorders_by_pk",
+      "description": "fetch data from the table: \"workorders\" using primary key columns",
+      "type": "workorders",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    }
+  ],
+  "mutations": [
+    {
+      "name": "delete_workorder_details",
+      "description": "delete data from the table: \"workorder_details\"",
+      "type": "workorder_details_mutation_response",
+      "args": [
+        {
+          "name": "where",
+          "type": "workorder_details_bool_exp!",
+          "description": "filter the rows which have to be deleted"
+        }
+      ]
+    },
+    {
+      "name": "delete_workorder_details_by_pk",
+      "description": "delete single row from the table: \"workorder_details\"",
+      "type": "workorder_details",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "insert_api_mobile_bus",
+      "description": "insert data into the table: \"api_mobile_bus\"",
+      "type": "api_mobile_bus_mutation_response",
+      "args": [
+        {
+          "name": "objects",
+          "type": "[api_mobile_bus_insert_input!]!",
+          "description": "the rows to be inserted"
+        }
+      ]
+    },
+    {
+      "name": "insert_api_mobile_bus_one",
+      "description": "insert a single row into the table: \"api_mobile_bus\"",
+      "type": "api_mobile_bus",
+      "args": [
+        {
+          "name": "object",
+          "type": "api_mobile_bus_insert_input!",
+          "description": "the row to be inserted"
+        }
+      ]
+    },
+    {
+      "name": "insert_bus",
+      "description": "insert data into the table: \"bus\"",
+      "type": "bus_mutation_response",
+      "args": [
+        {
+          "name": "objects",
+          "type": "[bus_insert_input!]!",
+          "description": "the rows to be inserted"
+        },
+        {
+          "name": "on_conflict",
+          "type": "bus_on_conflict",
+          "description": "upsert condition"
+        }
+      ]
+    },
+    {
+      "name": "insert_bus_one",
+      "description": "insert a single row into the table: \"bus\"",
+      "type": "bus",
+      "args": [
+        {
+          "name": "object",
+          "type": "bus_insert_input!",
+          "description": "the row to be inserted"
+        },
+        {
+          "name": "on_conflict",
+          "type": "bus_on_conflict",
+          "description": "upsert condition"
+        }
+      ]
+    },
+    {
+      "name": "insert_workorder_details",
+      "description": "insert data into the table: \"workorder_details\"",
+      "type": "workorder_details_mutation_response",
+      "args": [
+        {
+          "name": "objects",
+          "type": "[workorder_details_insert_input!]!",
+          "description": "the rows to be inserted"
+        },
+        {
+          "name": "on_conflict",
+          "type": "workorder_details_on_conflict",
+          "description": "upsert condition"
+        }
+      ]
+    },
+    {
+      "name": "insert_workorder_details_one",
+      "description": "insert a single row into the table: \"workorder_details\"",
+      "type": "workorder_details",
+      "args": [
+        {
+          "name": "object",
+          "type": "workorder_details_insert_input!",
+          "description": "the row to be inserted"
+        },
+        {
+          "name": "on_conflict",
+          "type": "workorder_details_on_conflict",
+          "description": "upsert condition"
+        }
+      ]
+    },
+    {
+      "name": "update_drivers",
+      "description": "update data of the table: \"drivers\"",
+      "type": "drivers_mutation_response",
+      "args": [
+        {
+          "name": "_append",
+          "type": "drivers_append_input",
+          "description": "append existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_delete_at_path",
+          "type": "drivers_delete_at_path_input",
+          "description": "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        },
+        {
+          "name": "_delete_elem",
+          "type": "drivers_delete_elem_input",
+          "description": "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        },
+        {
+          "name": "_delete_key",
+          "type": "drivers_delete_key_input",
+          "description": "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        },
+        {
+          "name": "_prepend",
+          "type": "drivers_prepend_input",
+          "description": "prepend existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_set",
+          "type": "drivers_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "where",
+          "type": "drivers_bool_exp!",
+          "description": "filter the rows which have to be updated"
+        }
+      ]
+    },
+    {
+      "name": "update_drivers_by_pk",
+      "description": "update single row of the table: \"drivers\"",
+      "type": "drivers",
+      "args": [
+        {
+          "name": "_append",
+          "type": "drivers_append_input",
+          "description": "append existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_delete_at_path",
+          "type": "drivers_delete_at_path_input",
+          "description": "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        },
+        {
+          "name": "_delete_elem",
+          "type": "drivers_delete_elem_input",
+          "description": "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        },
+        {
+          "name": "_delete_key",
+          "type": "drivers_delete_key_input",
+          "description": "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        },
+        {
+          "name": "_prepend",
+          "type": "drivers_prepend_input",
+          "description": "prepend existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_set",
+          "type": "drivers_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "pk_columns",
+          "type": "drivers_pk_columns_input!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "update_drivers_many",
+      "description": "update multiples rows of table: \"drivers\"",
+      "type": "[drivers_mutation_response]",
+      "args": [
+        {
+          "name": "updates",
+          "type": "[drivers_updates!]!",
+          "description": "updates to execute, in order"
+        }
+      ]
+    },
+    {
+      "name": "update_workorder_details",
+      "description": "update data of the table: \"workorder_details\"",
+      "type": "workorder_details_mutation_response",
+      "args": [
+        {
+          "name": "_append",
+          "type": "workorder_details_append_input",
+          "description": "append existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_delete_at_path",
+          "type": "workorder_details_delete_at_path_input",
+          "description": "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        },
+        {
+          "name": "_delete_elem",
+          "type": "workorder_details_delete_elem_input",
+          "description": "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        },
+        {
+          "name": "_delete_key",
+          "type": "workorder_details_delete_key_input",
+          "description": "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        },
+        {
+          "name": "_inc",
+          "type": "workorder_details_inc_input",
+          "description": "increments the numeric columns with given value of the filtered values"
+        },
+        {
+          "name": "_prepend",
+          "type": "workorder_details_prepend_input",
+          "description": "prepend existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_set",
+          "type": "workorder_details_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "where",
+          "type": "workorder_details_bool_exp!",
+          "description": "filter the rows which have to be updated"
+        }
+      ]
+    },
+    {
+      "name": "update_workorder_details_by_pk",
+      "description": "update single row of the table: \"workorder_details\"",
+      "type": "workorder_details",
+      "args": [
+        {
+          "name": "_append",
+          "type": "workorder_details_append_input",
+          "description": "append existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_delete_at_path",
+          "type": "workorder_details_delete_at_path_input",
+          "description": "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        },
+        {
+          "name": "_delete_elem",
+          "type": "workorder_details_delete_elem_input",
+          "description": "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        },
+        {
+          "name": "_delete_key",
+          "type": "workorder_details_delete_key_input",
+          "description": "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        },
+        {
+          "name": "_inc",
+          "type": "workorder_details_inc_input",
+          "description": "increments the numeric columns with given value of the filtered values"
+        },
+        {
+          "name": "_prepend",
+          "type": "workorder_details_prepend_input",
+          "description": "prepend existing jsonb value of filtered columns with new jsonb value"
+        },
+        {
+          "name": "_set",
+          "type": "workorder_details_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "pk_columns",
+          "type": "workorder_details_pk_columns_input!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "update_workorder_details_many",
+      "description": "update multiples rows of table: \"workorder_details\"",
+      "type": "[workorder_details_mutation_response]",
+      "args": [
+        {
+          "name": "updates",
+          "type": "[workorder_details_updates!]!",
+          "description": "updates to execute, in order"
+        }
+      ]
+    },
+    {
+      "name": "update_workorders",
+      "description": "update data of the table: \"workorders\"",
+      "type": "workorders_mutation_response",
+      "args": [
+        {
+          "name": "_inc",
+          "type": "workorders_inc_input",
+          "description": "increments the numeric columns with given value of the filtered values"
+        },
+        {
+          "name": "_set",
+          "type": "workorders_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "where",
+          "type": "workorders_bool_exp!",
+          "description": "filter the rows which have to be updated"
+        }
+      ]
+    },
+    {
+      "name": "update_workorders_by_pk",
+      "description": "update single row of the table: \"workorders\"",
+      "type": "workorders",
+      "args": [
+        {
+          "name": "_inc",
+          "type": "workorders_inc_input",
+          "description": "increments the numeric columns with given value of the filtered values"
+        },
+        {
+          "name": "_set",
+          "type": "workorders_set_input",
+          "description": "sets the columns of the filtered rows to the given values"
+        },
+        {
+          "name": "pk_columns",
+          "type": "workorders_pk_columns_input!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "update_workorders_many",
+      "description": "update multiples rows of table: \"workorders\"",
+      "type": "[workorders_mutation_response]",
+      "args": [
+        {
+          "name": "updates",
+          "type": "[workorders_updates!]!",
+          "description": "updates to execute, in order"
+        }
+      ]
+    }
+  ],
+  "subscriptions": [
+    {
+      "name": "answers_as_rows",
+      "description": "fetch data from the table: \"answers_as_rows\"",
+      "type": "[answers_as_rows!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[answers_as_rows_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[answers_as_rows_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "answers_as_rows_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "answers_as_rows_stream",
+      "description": "fetch data from the table in a streaming manner: \"answers_as_rows\"",
+      "type": "[answers_as_rows!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[answers_as_rows_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "answers_as_rows_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_bus",
+      "description": "fetch data from the table: \"api_mobile_bus\"",
+      "type": "[api_mobile_bus!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_bus_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_bus_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_bus_stream",
+      "description": "fetch data from the table in a streaming manner: \"api_mobile_bus\"",
+      "type": "[api_mobile_bus!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[api_mobile_bus_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_inspections",
+      "description": "fetch data from the table: \"api_mobile_inspections\"",
+      "type": "[api_mobile_inspections!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_inspections_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_inspections_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_inspections_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_inspections_stream",
+      "description": "fetch data from the table in a streaming manner: \"api_mobile_inspections\"",
+      "type": "[api_mobile_inspections!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[api_mobile_inspections_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_inspections_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_templates",
+      "description": "fetch data from the table: \"api_mobile_templates\"",
+      "type": "[api_mobile_templates!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_templates_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_templates_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_templates_stream",
+      "description": "fetch data from the table in a streaming manner: \"api_mobile_templates\"",
+      "type": "[api_mobile_templates!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[api_mobile_templates_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_workorders",
+      "description": "fetch data from the table: \"api_mobile_workorders\"",
+      "type": "[api_mobile_workorders!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[api_mobile_workorders_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[api_mobile_workorders_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "api_mobile_workorders_stream",
+      "description": "fetch data from the table in a streaming manner: \"api_mobile_workorders\"",
+      "type": "[api_mobile_workorders!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[api_mobile_workorders_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "api_mobile_workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "bus",
+      "description": "fetch data from the table: \"bus\"",
+      "type": "[bus!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[bus_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[bus_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "bus_by_pk",
+      "description": "fetch data from the table: \"bus\" using primary key columns",
+      "type": "bus",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "bus_stream",
+      "description": "fetch data from the table in a streaming manner: \"bus\"",
+      "type": "[bus!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[bus_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "bus_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "dashboard_mobile_view",
+      "description": "fetch data from the table: \"dashboard_mobile_view\"",
+      "type": "[dashboard_mobile_view!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[dashboard_mobile_view_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[dashboard_mobile_view_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "dashboard_mobile_view_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "dashboard_mobile_view_stream",
+      "description": "fetch data from the table in a streaming manner: \"dashboard_mobile_view\"",
+      "type": "[dashboard_mobile_view!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[dashboard_mobile_view_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "dashboard_mobile_view_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "domain_reason",
+      "description": "fetch data from the table: \"domain_reason\"",
+      "type": "[domain_reason!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[domain_reason_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[domain_reason_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "domain_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "domain_reason_by_pk",
+      "description": "fetch data from the table: \"domain_reason\" using primary key columns",
+      "type": "domain_reason",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "domain_reason_stream",
+      "description": "fetch data from the table in a streaming manner: \"domain_reason\"",
+      "type": "[domain_reason!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[domain_reason_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "domain_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "drivers",
+      "description": "fetch data from the table: \"drivers\"",
+      "type": "[drivers!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[drivers_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[drivers_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "drivers_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "drivers_by_pk",
+      "description": "fetch data from the table: \"drivers\" using primary key columns",
+      "type": "drivers",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "drivers_stream",
+      "description": "fetch data from the table in a streaming manner: \"drivers\"",
+      "type": "[drivers!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[drivers_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "drivers_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "employee_push",
+      "description": "fetch data from the table: \"employee_push\"",
+      "type": "[employee_push!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[employee_push_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[employee_push_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "employee_push_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "employee_push_stream",
+      "description": "fetch data from the table in a streaming manner: \"employee_push\"",
+      "type": "[employee_push!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[employee_push_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "employee_push_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "examination_templates",
+      "description": "fetch data from the table: \"examination_templates\"",
+      "type": "[examination_templates!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[examination_templates_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[examination_templates_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "examination_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "examination_templates_by_pk",
+      "description": "fetch data from the table: \"examination_templates\" using primary key columns",
+      "type": "examination_templates",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "examination_templates_stream",
+      "description": "fetch data from the table in a streaming manner: \"examination_templates\"",
+      "type": "[examination_templates!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[examination_templates_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "examination_templates_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "mobile_dashboard",
+      "description": "fetch data from the table: \"mobile_dashboard\"",
+      "type": "[mobile_dashboard!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[mobile_dashboard_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[mobile_dashboard_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "mobile_dashboard_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "mobile_dashboard_by_pk",
+      "description": "fetch data from the table: \"mobile_dashboard\" using primary key columns",
+      "type": "mobile_dashboard",
+      "args": [
+        {
+          "name": "id",
+          "type": "Int!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "mobile_dashboard_stream",
+      "description": "fetch data from the table in a streaming manner: \"mobile_dashboard\"",
+      "type": "[mobile_dashboard!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[mobile_dashboard_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "mobile_dashboard_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "mobile_reason",
+      "description": "fetch data from the table: \"mobile_reason\"",
+      "type": "[mobile_reason!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[mobile_reason_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[mobile_reason_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "mobile_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "mobile_reason_stream",
+      "description": "fetch data from the table in a streaming manner: \"mobile_reason\"",
+      "type": "[mobile_reason!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[mobile_reason_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "mobile_reason_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "templates_per_school",
+      "description": "fetch data from the table: \"templates_per_school\"",
+      "type": "[templates_per_school!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[templates_per_school_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[templates_per_school_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "templates_per_school_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "templates_per_school_stream",
+      "description": "fetch data from the table in a streaming manner: \"templates_per_school\"",
+      "type": "[templates_per_school!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[templates_per_school_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "templates_per_school_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorder_details",
+      "description": "fetch data from the table: \"workorder_details\"",
+      "type": "[workorder_details!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[workorder_details_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[workorder_details_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "workorder_details_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorder_details_by_pk",
+      "description": "fetch data from the table: \"workorder_details\" using primary key columns",
+      "type": "workorder_details",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "workorder_details_stream",
+      "description": "fetch data from the table in a streaming manner: \"workorder_details\"",
+      "type": "[workorder_details!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[workorder_details_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "workorder_details_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorders",
+      "description": "fetch data from the table: \"workorders\"",
+      "type": "[workorders!]!",
+      "args": [
+        {
+          "name": "distinct_on",
+          "type": "[workorders_select_column!]",
+          "description": "distinct select on columns"
+        },
+        {
+          "name": "limit",
+          "type": "Int",
+          "description": "limit the number of rows returned"
+        },
+        {
+          "name": "offset",
+          "type": "Int",
+          "description": "skip the first n rows. Use only with order_by"
+        },
+        {
+          "name": "order_by",
+          "type": "[workorders_order_by!]",
+          "description": "sort the rows by one or more columns"
+        },
+        {
+          "name": "where",
+          "type": "workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    },
+    {
+      "name": "workorders_by_pk",
+      "description": "fetch data from the table: \"workorders\" using primary key columns",
+      "type": "workorders",
+      "args": [
+        {
+          "name": "id",
+          "type": "bigint!",
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "workorders_stream",
+      "description": "fetch data from the table in a streaming manner: \"workorders\"",
+      "type": "[workorders!]!",
+      "args": [
+        {
+          "name": "batch_size",
+          "type": "Int!",
+          "description": "maximum number of rows returned in a single batch"
+        },
+        {
+          "name": "cursor",
+          "type": "[workorders_stream_cursor_input]!",
+          "description": "cursor to stream the results returned by the query"
+        },
+        {
+          "name": "where",
+          "type": "workorders_bool_exp",
+          "description": "filter the rows returned"
+        }
+      ]
+    }
+  ]
+}

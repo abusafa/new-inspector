@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'etl_users' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.etl_users",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

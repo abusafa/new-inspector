@@ -1,0 +1,66 @@
+{
+  "data": {
+    "domain_reason": [
+      {
+        "classification": 1,
+        "id": 3,
+        "reason": "تعليق الدراسة",
+        "shift": 1
+      },
+      {
+        "classification": 1,
+        "id": 64,
+        "reason": "المركبة غير متواجدة\t",
+        "shift": 1
+      },
+      {
+        "classification": 1,
+        "id": 63,
+        "reason": "المركبة غير متواجدة\t",
+        "shift": 2
+      },
+      {
+        "classification": 1,
+        "id": 22,
+        "reason": "تعليق الدراسة",
+        "shift": 3
+      },
+      {
+        "classification": 1,
+        "id": 61,
+        "reason": "الحافلة غير متواجدة\t",
+        "shift": 3
+      },
+      {
+        "classification": 1,
+        "id": 56,
+        "reason": "دراسة عن بعد",
+        "shift": 2
+      },
+      {
+        "classification": 1,
+        "id": 55,
+        "reason": "دراسة عن بعد",
+        "shift": 2
+      },
+      {
+        "classification": 1,
+        "id": 24,
+        "reason": "الدورات التدريبية",
+        "shift": 3
+      },
+      {
+        "classification": 3,
+        "id": 9,
+        "reason": "التأخر في فحص الحافلة/المركبة",
+        "shift": 1
+      },
+      {
+        "classification": 1,
+        "id": 23,
+        "reason": "تكليف الموظف بأعمال مكتبية",
+        "shift": 3
+      }
+    ]
+  }
+}

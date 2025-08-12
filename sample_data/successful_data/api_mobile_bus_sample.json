@@ -1,0 +1,196 @@
+{
+  "data": {
+    "api_mobile_bus": [
+      {
+        "attachments": [
+          "https://s3.tatweertransit.com/upload/upload/83d2b1a7-d1d9-4631-8ed2-cf6424d07ef3"
+        ],
+        "bus_number": "2 5 4 6 ر ص ا",
+        "bus_type_id": 1,
+        "created_by": null,
+        "current_contract_id": 154,
+        "current_contractor_id": 18,
+        "domain_examination_type_id": 2,
+        "enable_special_needs": false,
+        "id": 8144538,
+        "operation_number": "04",
+        "plate_number": "2546",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ص",
+        "plate_symbol3": "ر",
+        "seat_capacity": "13"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "5 3 1 0 ع ع ب",
+        "bus_type_id": 1,
+        "created_by": null,
+        "current_contract_id": 154,
+        "current_contractor_id": 18,
+        "domain_examination_type_id": 2,
+        "enable_special_needs": false,
+        "id": 8144539,
+        "operation_number": "9999",
+        "plate_number": "5310",
+        "plate_symbol1": "ب",
+        "plate_symbol2": "ع",
+        "plate_symbol3": "ع",
+        "seat_capacity": "15"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "8 4 1 2 م ح ا",
+        "bus_type_id": 2,
+        "created_by": null,
+        "current_contract_id": 153,
+        "current_contractor_id": 2,
+        "domain_examination_type_id": 1,
+        "enable_special_needs": false,
+        "id": 8121685,
+        "operation_number": "2167",
+        "plate_number": "8412",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ح",
+        "plate_symbol3": "م",
+        "seat_capacity": "55"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "8 5 5 2 ن ص ا",
+        "bus_type_id": 1,
+        "created_by": null,
+        "current_contract_id": 154,
+        "current_contractor_id": 18,
+        "domain_examination_type_id": 2,
+        "enable_special_needs": false,
+        "id": 8144540,
+        "operation_number": "9999",
+        "plate_number": "8552",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ص",
+        "plate_symbol3": "ن",
+        "seat_capacity": "15"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "5 3 0 5 ص ص ا",
+        "bus_type_id": 1,
+        "created_by": null,
+        "current_contract_id": 154,
+        "current_contractor_id": 18,
+        "domain_examination_type_id": 2,
+        "enable_special_needs": false,
+        "id": 8144541,
+        "operation_number": "9999",
+        "plate_number": "5305",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ص",
+        "plate_symbol3": "ص",
+        "seat_capacity": "15"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "3 9 5 4 ع ص ا",
+        "bus_type_id": 1,
+        "created_by": null,
+        "current_contract_id": 154,
+        "current_contractor_id": 18,
+        "domain_examination_type_id": 2,
+        "enable_special_needs": false,
+        "id": 8144542,
+        "operation_number": "9999",
+        "plate_number": "3954",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ص",
+        "plate_symbol3": "ع",
+        "seat_capacity": "15"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "4 7 4 7 ر ح ا",
+        "bus_type_id": 2,
+        "created_by": null,
+        "current_contract_id": 153,
+        "current_contractor_id": 2,
+        "domain_examination_type_id": 1,
+        "enable_special_needs": false,
+        "id": 8121688,
+        "operation_number": "8102",
+        "plate_number": "4747",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ح",
+        "plate_symbol3": "ر",
+        "seat_capacity": "45"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "4 9 6 3 ط ر ا",
+        "bus_type_id": 2,
+        "created_by": null,
+        "current_contract_id": 128,
+        "current_contractor_id": 4,
+        "domain_examination_type_id": 1,
+        "enable_special_needs": false,
+        "id": 8098971,
+        "operation_number": "40268",
+        "plate_number": "4963",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ر",
+        "plate_symbol3": "ط",
+        "seat_capacity": "27"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "8 5 1 1 م ح ا",
+        "bus_type_id": 2,
+        "created_by": null,
+        "current_contract_id": 153,
+        "current_contractor_id": 2,
+        "domain_examination_type_id": 1,
+        "enable_special_needs": false,
+        "id": 8144543,
+        "operation_number": "2246",
+        "plate_number": "8511",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "ح",
+        "plate_symbol3": "م",
+        "seat_capacity": "55"
+      },
+      {
+        "attachments": [
+          null
+        ],
+        "bus_number": "1 2 6 3 ع د ا",
+        "bus_type_id": 2,
+        "created_by": null,
+        "current_contract_id": 156,
+        "current_contractor_id": 19,
+        "domain_examination_type_id": 3,
+        "enable_special_needs": false,
+        "id": 8144544,
+        "operation_number": "4419002994",
+        "plate_number": "1263",
+        "plate_symbol1": "ا",
+        "plate_symbol2": "د",
+        "plate_symbol3": "ع",
+        "seat_capacity": "22"
+      }
+    ]
+  }
+}

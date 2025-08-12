@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'etl_config_gql' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.etl_config_gql",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

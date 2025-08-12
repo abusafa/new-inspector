@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'domain_reason_row' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.domain_reason_row",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

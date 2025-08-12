@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'created_at' not found in type: 'api_mobile_inspections_order_by'",
+      "extensions": {
+        "path": "$.selectionSet.api_mobile_inspections.args.order_by[0].created_at",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

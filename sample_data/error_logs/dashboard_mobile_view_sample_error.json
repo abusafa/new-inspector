@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'id' not found in type: 'dashboard_mobile_view'",
+      "extensions": {
+        "path": "$.selectionSet.dashboard_mobile_view.selectionSet.id",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

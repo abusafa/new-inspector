@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'domain_examination_form_templates' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.domain_examination_form_templates",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

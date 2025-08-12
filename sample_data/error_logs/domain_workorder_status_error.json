@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'domain_workorder_status' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.domain_workorder_status",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

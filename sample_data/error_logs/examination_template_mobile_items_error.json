@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'examination_template_mobile_items' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.examination_template_mobile_items",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

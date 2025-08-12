@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'operation_trips' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.operation_trips",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

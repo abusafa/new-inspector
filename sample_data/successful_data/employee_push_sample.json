@@ -1,0 +1,46 @@
+{
+  "data": {
+    "employee_push": [
+      {
+        "id": 106,
+        "room": "employee_106"
+      },
+      {
+        "id": 106,
+        "room": "public_sector_25"
+      },
+      {
+        "id": 106,
+        "room": "public_zone_418"
+      },
+      {
+        "id": 108,
+        "room": "employee_108"
+      },
+      {
+        "id": 108,
+        "room": "public_sector_27"
+      },
+      {
+        "id": 108,
+        "room": "public_zone_392"
+      },
+      {
+        "id": 108,
+        "room": "public_zone_401"
+      },
+      {
+        "id": 108,
+        "room": "public_zone_410"
+      },
+      {
+        "id": 108,
+        "room": "public_zone_417"
+      },
+      {
+        "id": 108,
+        "room": "public_zone_427"
+      }
+    ]
+  }
+}

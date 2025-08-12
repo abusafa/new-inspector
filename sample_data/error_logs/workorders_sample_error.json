@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'bus_id' not found in type: 'workorders'",
+      "extensions": {
+        "path": "$.selectionSet.workorders.selectionSet.bus_id",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "id": "tmpl-food-001",
+    "name": "Food Safety (HACCP) Checklist",
+    "version": 1,
+    "locale": "en"
+  },
+  "response_sets": {
+    "rs_compliant": {
+      "type": "single",
+      "options": [
+        { "id": "compliant", "label": "Compliant" },
+        { "id": "non_compliant", "label": "Non-compliant" },
+        { "id": "na", "label": "N/A" }
+      ],
+      "fail_ids": ["non_compliant"]
+    }
+  },
+  "sections": [
+    {
+      "id": "sec-1",
+      "label": "Personal Hygiene",
+      "items": [
+        {
+          "id": "q-1",
+          "type": "choice",
+          "label": "Handwashing stations stocked",
+          "response_set_id": "rs_compliant",
+          "required": true,
+          "media_required_on_fail": true,
+          "notes_enabled": true,
+          "score": { "compliant": 1, "non_compliant": 0, "na": 0 }
+        }
+      ]
+    },
+    {
+      "id": "sec-2",
+      "label": "Cold Storage",
+      "items": [
+        {
+          "id": "q-2",
+          "type": "number",
+          "label": "Refrigerator temperature (°C)",
+          "min": -1,
+          "max": 5,
+          "units": "°C",
+          "notes_enabled": true
+        },
+        {
+          "id": "q-3",
+          "type": "choice",
+          "label": "Temperature within safe range",
+          "response_set_id": "rs_compliant",
+          "required": true,
+          "logic": [
+            {
+              "when": { "equals": { "response_id": "non_compliant" } },
+              "require": ["photo", "notes"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-3",
+      "label": "Corrective Actions",
+      "items": [
+        {
+          "id": "q-4",
+          "type": "action",
+          "label": "Raise corrective action",
+          "defaults": { "priority": "medium" },
+          "binds_to_failed_items": true
+        }
+      ]
+    }
+  ],
+  "scoring": { "method": "sum", "max": 2 }
+}
+
+

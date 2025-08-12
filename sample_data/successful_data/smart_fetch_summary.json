@@ -1,0 +1,26 @@
+{
+  "api_endpoint": "https://inspector-gql.tatweertransit.com/v1/graphql",
+  "authentication": "x-hasura-admin-secret",
+  "total_tables": 16,
+  "successful_queries": 22,
+  "failed_queries": 0,
+  "tables_fetched": [
+    "answers_as_rows",
+    "api_mobile_bus",
+    "api_mobile_inspections",
+    "api_mobile_templates",
+    "api_mobile_workorders",
+    "bus",
+    "dashboard_mobile_view",
+    "domain_reason",
+    "drivers",
+    "employee_push",
+    "examination_templates",
+    "mobile_dashboard",
+    "mobile_reason",
+    "templates_per_school",
+    "workorder_details",
+    "workorders"
+  ],
+  "fetch_timestamp": "2025-08-12 07:38:48"
+}

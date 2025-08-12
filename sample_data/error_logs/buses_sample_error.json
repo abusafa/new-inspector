@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'model' not found in type: 'bus'",
+      "extensions": {
+        "path": "$.selectionSet.bus.selectionSet.model",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

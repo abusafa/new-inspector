@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'license_number' not found in type: 'drivers'",
+      "extensions": {
+        "path": "$.selectionSet.drivers.selectionSet.license_number",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

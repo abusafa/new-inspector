@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'answer_value' not found in type: 'answers_as_rows'",
+      "extensions": {
+        "path": "$.selectionSet.answers_as_rows.selectionSet.answer_value",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

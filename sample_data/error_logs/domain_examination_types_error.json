@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'domain_examination_types' not found in type: 'query_root'",
+      "extensions": {
+        "path": "$.selectionSet.domain_examination_types",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}

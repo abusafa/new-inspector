@@ -1,0 +1,11 @@
+{
+  "errors": [
+    {
+      "message": "field 'reason_code' not found in type: 'domain_reason'",
+      "extensions": {
+        "path": "$.selectionSet.domain_reason.selectionSet.reason_code",
+        "code": "validation-failed"
+      }
+    }
+  ]
+}
