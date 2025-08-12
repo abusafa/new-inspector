@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -8,18 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { 
-  Calendar, 
-  MapPin, 
   User, 
   Clock, 
   AlertTriangle, 
   CheckCircle2, 
   Search,
   Filter,
-  Navigation,
   AlertCircle,
   TrendingUp,
-  Users,
   ClipboardList,
   X,
   Edit3
@@ -118,18 +114,7 @@ export function WorkOrderList({ workOrders, onSelectWorkOrder }: WorkOrderListPr
     }
   };
 
-  const getStatusIcon = (status: WorkOrder['status']) => {
-    switch (status) {
-      case 'completed':
-        return CheckCircle2;
-      case 'overdue':
-        return AlertTriangle;
-      case 'in-progress':
-        return Clock;
-      default:
-        return AlertCircle;
-    }
-  };
+  // no-op keep
 
   const getDueDateColor = (dueDate?: string, status?: WorkOrder['status']) => {
     if (status === 'completed') return 'text-muted-foreground';
@@ -158,12 +143,7 @@ export function WorkOrderList({ workOrders, onSelectWorkOrder }: WorkOrderListPr
     });
   };
 
-  const openDirections = (location: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    const encodedLocation = encodeURIComponent(location);
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
-    window.open(mapsUrl, '_blank');
-  };
+  // no-op keep
 
   const handleSelectOrder = (orderId: string, checked: boolean) => {
     const newSelected = new Set(selectedOrders);

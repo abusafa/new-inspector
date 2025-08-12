@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider } from './components/AuthProvider';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -9,6 +8,7 @@ import { InspectionPage } from '@/routes/InspectionPage';
 import { ResultsPage } from '@/routes/ResultsPage';
 import { useAuth } from '@/hooks/useAuth';
 import { ProfilePage } from '@/components/ProfilePage';
+import { MobileShell } from '@/components/MobileShell';
 
 function App() {
   return (
@@ -17,12 +17,14 @@ function App() {
         <Route path="/login" element={<LoginScreenWrapper />} />
 
         <Route element={<ProtectedRoute />}> 
-          <Route index element={<Navigate to="/work-orders" replace />} />
-          <Route path="/work-orders" element={<WorkOrdersPage />} />
-          <Route path="/work-orders/:workOrderId" element={<WorkOrderDetailPage />} />
-          <Route path="/work-orders/:workOrderId/inspections/:inspectionId" element={<InspectionPage />} />
-          <Route path="/results/:inspectionId" element={<ResultsPage />} />
-          <Route path="/profile" element={<ProfilePageWrapper />} />
+          <Route element={<MobileShell />}> 
+            <Route index element={<Navigate to="/work-orders" replace />} />
+            <Route path="/work-orders" element={<WorkOrdersPage />} />
+            <Route path="/work-orders/:workOrderId" element={<WorkOrderDetailPage />} />
+            <Route path="/work-orders/:workOrderId/inspections/:inspectionId" element={<InspectionPage />} />
+            <Route path="/results/:inspectionId" element={<ResultsPage />} />
+            <Route path="/profile" element={<ProfilePageWrapper />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<Navigate to="/work-orders" replace />} />

@@ -1,8 +1,7 @@
 // Date formatting utility that respects user preferences
-export function formatDate(date: string | Date, format?: string, locale?: string): string {
+export function formatDate(date: string | Date, format?: string, _locale?: string): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   const savedFormat = localStorage.getItem('safetycheck_dateFormat') || format || 'MM/DD/YYYY';
-  const savedLocale = localStorage.getItem('safetycheck_language') || locale || 'en';
   
   // Handle different date formats
   const day = dateObj.getDate().toString().padStart(2, '0');

@@ -22,11 +22,7 @@ import {
 } from 'lucide-react';
 import { MediaItem, NoteItem, ActionItem } from '@/types/inspection';
 
-interface ContextualActionsProps {
-  itemId: string;
-}
-
-export function ContextualActions({ itemId }: ContextualActionsProps) {
+export function ContextualActions() {
   const [media, setMedia] = useState<MediaItem[]>([]);
   const [notes, setNotes] = useState<NoteItem[]>([]);
   const [actions, setActions] = useState<ActionItem[]>([]);

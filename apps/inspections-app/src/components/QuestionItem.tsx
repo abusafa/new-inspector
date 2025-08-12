@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { CheckCircle, XCircle, MinusCircle, Camera, MessageSquare, Plus, AlertTriangle } from 'lucide-react';
+import { CheckCircle, XCircle, MinusCircle, Camera, Plus, AlertTriangle } from 'lucide-react';
 import { InspectionItem, InspectionData } from '@/types/inspection';
 import { ContextualActions } from './ContextualActions';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,7 +15,7 @@ interface QuestionItemProps {
   formData: InspectionData;
 }
 
-export function QuestionItem({ item, value, onUpdate, formData }: QuestionItemProps) {
+export function QuestionItem({ item, value, onUpdate }: QuestionItemProps) {
   const [showProblemDetails, setShowProblemDetails] = useState(false);
   
   if (!item.response_set) return null;
@@ -140,7 +140,7 @@ export function QuestionItem({ item, value, onUpdate, formData }: QuestionItemPr
 
 
           {/* Standard Contextual Actions (only show if not a failure) */}
-          {!isFailure && <ContextualActions itemId={item.item_id} />}
+          {!isFailure && <ContextualActions />}
         </div>
       </CardContent>
     </Card>

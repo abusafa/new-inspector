@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { FileCheck, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { InspectionTemplate, InspectionResult, WorkOrder, WorkOrderInspection } from '@/types/inspection';
@@ -12,7 +12,7 @@ import { UserProfile } from './UserProfile';
 import { useAuth } from '@/hooks/useAuth';
 import { sampleTemplate } from '@/data/sampleTemplate';
 import { sampleWorkOrders } from '@/data/sampleWorkOrders';
-import { formatDateTime } from '@/utils/dateFormatter';
+//
 
 type AppState = 'work-orders' | 'work-order-detail' | 'inspection' | 'results' | 'profile';
 
@@ -20,7 +20,7 @@ export function InspectionApp() {
   const { user, isLoading, login } = useAuth();
   const [currentState, setCurrentState] = useState<AppState>('work-orders');
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
-  const [selectedInspection, setSelectedInspection] = useState<WorkOrderInspection | null>(null);
+  const [selectedInspection, _setSelectedInspection] = useState<WorkOrderInspection | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<InspectionTemplate | null>(null);
   const [inspectionResult, setInspectionResult] = useState<InspectionResult | null>(null);
 

@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, CheckCircle2, Clock, User, ChevronDown, ChevronRight, CheckCheck } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronDown, ChevronRight, CheckCheck } from 'lucide-react';
 import { InspectionTemplate, InspectionData, InspectionResult, InspectionItem } from '@/types/inspection';
 import { HeaderSection } from './HeaderSection';
 import { SectionItem } from './SectionItem';

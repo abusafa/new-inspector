@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -14,8 +14,7 @@ import {
   PlayCircle, 
   AlertCircle,
   FileText,
-  Star,
-  Navigation
+  Star
 } from 'lucide-react';
 import { WorkOrder, WorkOrderInspection, InspectionTemplate } from '@/types/inspection';
 
@@ -90,11 +89,7 @@ export function WorkOrderDetail({ workOrder, onBack, onStartInspection, getTempl
     });
   };
 
-  const openDirections = (location: string) => {
-    const encodedLocation = encodeURIComponent(location);
-    const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
-    window.open(mapsUrl, '_blank');
-  };
+  // no-op keep
 
   const progress = calculateProgress();
   const completedInspections = workOrder.inspections.filter(i => i.status === 'completed').length;
@@ -145,15 +140,6 @@ export function WorkOrderDetail({ workOrder, onBack, onStartInspection, getTempl
                   <div className="font-medium">Location</div>
                   <div className="flex items-center gap-2">
                     <span className="text-slate-600 text-sm">{workOrder.location}</span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 w-6 p-0 hover:bg-blue-100"
-                      onClick={() => openDirections(workOrder.location!)}
-                      title="Get directions"
-                    >
-                      <Navigation className="h-4 w-4 text-blue-600" />
-                    </Button>
                   </div>
                 </div>
               </div>

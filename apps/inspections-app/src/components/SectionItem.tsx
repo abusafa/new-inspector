@@ -34,7 +34,6 @@ export function SectionItem({ section, formData, onUpdate }: SectionItemProps) {
                 item={item}
                 value={formData[item.item_id] as string}
                 onUpdate={(value) => onUpdate(item.item_id, value)}
-                formData={formData}
               />
             );
           case 'text':

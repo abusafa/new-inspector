@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Clock, User, Hash, Calendar } from 'lucide-react';
+import { Clock, User, Hash } from 'lucide-react';
 import { HeaderItem, InspectionData } from '@/types/inspection';
 
 interface HeaderSectionProps {

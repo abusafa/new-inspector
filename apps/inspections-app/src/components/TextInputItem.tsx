@@ -3,7 +3,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Camera, X, Image, MessageSquare, Plus } from 'lucide-react';
+import { Camera, X, Image } from 'lucide-react';
 import { InspectionItem } from '@/types/inspection';
 import { ContextualActions } from './ContextualActions';
 
@@ -101,7 +101,7 @@ export function TextInputItem({ item, value, onUpdate, photos, onPhotosUpdate }:
             </div>
           )}
 
-          <ContextualActions itemId={item.item_id} />
+          <ContextualActions />
         </div>
       </CardContent>
     </Card>

@@ -27,7 +27,6 @@ import {
   Key,
   Clock,
   CheckCircle2,
-  AlertCircle,
   Settings,
   Save,
   Camera,
@@ -258,34 +257,38 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
   if (!user) return null;
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-4">
-        <Button variant="outline" onClick={onBack} className="flex items-center gap-2">
+    <div className="mx-auto max-w-xl px-3">
+      {/* Header (compact for mobile) */}
+      <div className="mb-4 flex items-center gap-3">
+        <Button
+          variant="outline"
+          onClick={onBack}
+          className="flex items-center gap-2 h-9 px-3"
+        >
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Profile & Settings</h1>
-          <p className="text-muted-foreground">Manage your account and preferences</p>
+        <div className="min-w-0">
+          <h1 className="text-lg font-bold leading-tight truncate">Profile & Settings</h1>
+          <p className="text-muted-foreground text-xs">Manage your account and preferences</p>
         </div>
       </div>
 
-      <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile" className="flex items-center gap-2">
+      <Tabs defaultValue="profile" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4 text-xs">
+          <TabsTrigger value="profile" className="flex items-center gap-1 py-2">
             <User className="h-4 w-4" />
             Profile
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+          <TabsTrigger value="notifications" className="flex items-center gap-1 py-2">
             <Bell className="h-4 w-4" />
-            Notifications
+            Alerts
           </TabsTrigger>
-          <TabsTrigger value="preferences" className="flex items-center gap-2">
+          <TabsTrigger value="preferences" className="flex items-center gap-1 py-2">
             <Settings className="h-4 w-4" />
-            Preferences
+            Prefs
           </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
+          <TabsTrigger value="security" className="flex items-center gap-1 py-2">
             <Shield className="h-4 w-4" />
             Security
           </TabsTrigger>
@@ -293,7 +296,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -302,9 +305,9 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                 </div>
                 <Button
                   variant={isEditing ? "default" : "outline"}
-                  onClick={() => isEditing ? handleSaveProfile() : setIsEditing(true)}
+                  onClick={() => (isEditing ? handleSaveProfile() : setIsEditing(true))}
                   disabled={isSaving}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 h-9 px-3"
                 >
                   {isSaving ? (
                     <>
@@ -325,12 +328,12 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
+            <CardContent className="p-4">
+              <div className="space-y-4">
                 {/* Avatar Section */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4">
                   <div className="relative">
-                    <Avatar className="h-20 w-20">
+                    <Avatar className="h-16 w-16">
                       <AvatarFallback className="bg-blue-600 text-white text-xl">
                         {getInitials(profileData.name || 'U')}
                       </AvatarFallback>
@@ -345,8 +348,8 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                     )}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">{profileData.name}</h3>
-                    <p className="text-muted-foreground">{profileData.role}</p>
+                    <h3 className="text-base font-semibold leading-tight">{profileData.name}</h3>
+                    <p className="text-muted-foreground text-sm">{profileData.role}</p>
                     <Badge variant="outline" className="mt-1">
                       {profileData.employeeId}
                     </Badge>
@@ -356,7 +359,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                 <Separator />
 
                 {/* Form Fields */}
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <div className="flex items-center gap-2">
@@ -366,6 +369,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         value={profileData.name}
                         onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
                         disabled={!isEditing}
+                        className="h-10"
                       />
                     </div>
                   </div>
@@ -380,6 +384,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         value={profileData.email}
                         onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
                         disabled={!isEditing}
+                        className="h-10"
                       />
                     </div>
                   </div>
@@ -392,7 +397,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         id="phone"
                         value={profileData.phoneNumber}
                         disabled={true}
-                        className="bg-muted"
+                        className="bg-muted h-10"
                       />
                     </div>
                     <p className="text-xs text-muted-foreground">Phone number cannot be changed</p>
@@ -406,7 +411,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         id="role"
                         value={profileData.role}
                         disabled={true}
-                        className="bg-muted"
+                        className="bg-muted h-10"
                       />
                     </div>
                   </div>
@@ -420,6 +425,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         value={profileData.department}
                         onChange={(e) => setProfileData(prev => ({ ...prev, department: e.target.value }))}
                         disabled={!isEditing}
+                        className="h-10"
                       />
                     </div>
                   </div>
@@ -433,6 +439,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                         value={profileData.location}
                         onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
                         disabled={!isEditing}
+                        className="h-10"
                       />
                     </div>
                   </div>
@@ -470,12 +477,12 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
 
         {/* Notifications Tab */}
         <TabsContent value="notifications" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle>Notification Preferences</CardTitle>
               <CardDescription>Choose how you want to be notified about updates and activities</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 p-4">
               <div className="space-y-4">
                 <h4 className="font-medium">General Notifications</h4>
                 <div className="space-y-4">
@@ -568,13 +575,13 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
 
         {/* Preferences Tab */}
         <TabsContent value="preferences" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle>App Preferences</CardTitle>
               <CardDescription>Customize your app experience</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
+            <CardContent className="space-y-6 p-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label>Theme</Label>
                   <Select
@@ -721,12 +728,12 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
 
         {/* Security Tab */}
         <TabsContent value="security" className="space-y-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
               <CardTitle>Security & Privacy</CardTitle>
               <CardDescription>Manage your account security and privacy settings</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 p-4">
               <div className="space-y-4">
                 <h4 className="font-medium">Account Security</h4>
                 <Alert>
@@ -817,7 +824,7 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
                     <div className="font-medium">Sign Out</div>
                     <div className="text-sm text-muted-foreground">Sign out of your account on this device</div>
                   </div>
-                  <Button variant="outline" onClick={logout}>
+                  <Button variant="outline" onClick={logout} className="h-9 px-3">
                     Sign Out
                   </Button>
                 </div>
@@ -826,6 +833,9 @@ export function ProfilePage({ onBack }: ProfilePageProps) {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Spacer for bottom nav on mobile */}
+      <div className="h-16" />
     </div>
   );
 }

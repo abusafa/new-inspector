@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { User, LogOut, Settings, Phone } from 'lucide-react';
+import { User, LogOut, Phone } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 interface UserProfileProps {
