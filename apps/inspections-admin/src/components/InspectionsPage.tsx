@@ -7,6 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useInspections, useTemplates } from '@/hooks/useApi';
 import { formatDate, formatDateTime } from '@/lib/utils';
 import type { Inspection, InspectionTemplate } from '@/lib/api';
+import { InspectionDetailModal } from '@/components/modals/InspectionDetailModal';
+import { TemplateDetailModal } from '@/components/modals/TemplateDetailModal';
 import { 
   Search, 
   Plus, 
@@ -38,7 +40,13 @@ function getStatusColor(status: string) {
   }
 }
 
-function TemplateCard({ template }: { template: InspectionTemplate }) {
+function TemplateCard({ 
+  template, 
+  onView 
+}: { 
+  template: InspectionTemplate;
+  onView: (template: InspectionTemplate) => void;
+}) {
   const schema = template.schemaJson as any;
   const headerItemsCount = schema?.header_items?.length || 0;
   const sectionsCount = schema?.items?.length || 0;
@@ -111,7 +119,11 @@ function TemplateCard({ template }: { template: InspectionTemplate }) {
               <span>Inspection Template</span>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onView(template)}
+              >
                 <Eye className="h-4 w-4 mr-1" />
                 View
               </Button>
@@ -136,6 +148,10 @@ export function InspectionsPage() {
   const { data: templates, loading: templatesLoading, error: templatesError, refetch: refetchTemplates } = useTemplates();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'inspections' | 'templates'>('inspections');
+  const [inspectionDetailModalOpen, setInspectionDetailModalOpen] = useState(false);
+  const [templateDetailModalOpen, setTemplateDetailModalOpen] = useState(false);
+  const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<InspectionTemplate | null>(null);
 
   const filteredInspections = inspections?.filter(inspection =>
     inspection.inspectionId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -377,7 +393,14 @@ export function InspectionsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="sm">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => {
+                          setSelectedInspection(inspection);
+                          setInspectionDetailModalOpen(true);
+                        }}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm">
@@ -393,7 +416,14 @@ export function InspectionsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredTemplates.map((template) => (
-            <TemplateCard key={template.id} template={template} />
+            <TemplateCard 
+              key={template.id} 
+              template={template}
+              onView={(template) => {
+                setSelectedTemplate(template);
+                setTemplateDetailModalOpen(true);
+              }}
+            />
           ))}
         </div>
       )}
@@ -424,6 +454,19 @@ export function InspectionsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Modals */}
+      <InspectionDetailModal
+        open={inspectionDetailModalOpen}
+        onOpenChange={setInspectionDetailModalOpen}
+        inspection={selectedInspection}
+      />
+
+      <TemplateDetailModal
+        open={templateDetailModalOpen}
+        onOpenChange={setTemplateDetailModalOpen}
+        template={selectedTemplate}
+      />
     </div>
   );
 }
