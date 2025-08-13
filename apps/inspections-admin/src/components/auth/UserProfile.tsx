@@ -137,7 +137,7 @@ export function UserProfile({ variant = 'dropdown', showFullProfile = false }: U
             </div>
             <div>
               <CardTitle className="text-xl">{user.name}</CardTitle>
-              <CardDescription className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-2 mt-1">
                 <Badge className={getRoleColor(user.role)}>
                   <Shield className="h-3 w-3 mr-1" />
                   {user.role}
@@ -146,7 +146,7 @@ export function UserProfile({ variant = 'dropdown', showFullProfile = false }: U
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Active
                 </Badge>
-              </CardDescription>
+              </div>
             </div>
           </div>
           <Button variant="outline" onClick={logout} className="text-red-600 hover:text-red-700">

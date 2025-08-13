@@ -27,14 +27,14 @@ const ROLE_PERMISSIONS: Record<string, string[]> = {
     'users.view', 'users.create', 'users.edit', 'users.delete', 'users.manage_roles',
     'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.delete', 'workorders.assign',
     'inspections.view', 'inspections.create', 'inspections.edit', 'inspections.delete', 'inspections.approve',
-    'templates.view', 'templates.create', 'templates.edit', 'templates.delete',
+    'templates.view', 'templates.create', 'templates.edit', 'templates.delete', 'templates.manage',
     'analytics.view', 'system.settings', 'system.export', 'system.audit'
   ],
   'Safety Manager': [
     'users.view', 'users.edit',
     'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.assign',
     'inspections.view', 'inspections.create', 'inspections.edit', 'inspections.approve',
-    'templates.view', 'templates.create', 'templates.edit',
+    'templates.view', 'templates.create', 'templates.edit', 'templates.manage',
     'analytics.view', 'system.export'
   ],
   'Safety Supervisor': [

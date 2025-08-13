@@ -49,7 +49,32 @@ model InspectionTemplate {
   schemaJson  Json
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  
+  // Enhanced template management fields
+  category    String       @default("General")
+  tags        String[]     @default([])
+  version     String       @default("1.0.0")
+  status      String       @default("draft") // draft, published, archived
+  isPublic    Boolean      @default(false)
+  createdBy   String?      // User ID who created the template
+  lastModifiedBy String?   // User ID who last modified the template
+  
+  // Template metadata
+  estimatedDuration Int?   // Estimated completion time in minutes
+  difficulty     String?  // easy, medium, hard
+  industry       String?  // Construction, Manufacturing, etc.
+  equipmentType  String?  // Forklift, Crane, etc.
+  
+  // Version control
+  parentId       String?  // Reference to parent template for versions
+  isLatestVersion Boolean @default(true)
+  
   inspections Inspection[]
+  
+  @@index([category])
+  @@index([status])
+  @@index([createdBy])
+  @@index([parentId])
 }
 
 model Inspection {

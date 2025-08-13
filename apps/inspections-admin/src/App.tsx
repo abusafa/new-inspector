@@ -14,6 +14,7 @@ import { InspectionsPage } from './components/InspectionsPage';
 import { UsersPage } from './components/UsersPage';
 import { SettingsPage } from './components/SettingsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
+import { TemplateManagementPage } from './components/TemplateManagementPage';
 import { Toaster } from './components/ui/toaster';
 import { 
   LayoutDashboard, 
@@ -23,7 +24,8 @@ import {
   Settings,
   BarChart3,
   Shield,
-  Bell
+  Bell,
+  Layers
 } from 'lucide-react';
 
 function Layout() {
@@ -83,6 +85,22 @@ function Layout() {
                 >
                   <ClipboardList className="h-4 w-4" />
                   Inspections
+                </NavLink>
+              </WithPermission>
+              
+              <WithPermission permission="templates.manage">
+                <NavLink 
+                  to="/templates" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <Layers className="h-4 w-4" />
+                  Templates
                 </NavLink>
               </WithPermission>
               
@@ -172,6 +190,14 @@ const routes: RouteObject[] = [
         element: (
           <ProtectedRoute requiredPermission="inspections.view">
             <InspectionsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'templates',
+        element: (
+          <ProtectedRoute requiredPermission="templates.manage">
+            <TemplateManagementPage />
           </ProtectedRoute>
         ),
       },

@@ -20,6 +20,19 @@ export declare class InspectionsController {
             templateId: string;
             description: string;
             schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            category: string;
+            tags: string[];
+            version: string;
+            status: string;
+            isPublic: boolean;
+            createdBy: string | null;
+            lastModifiedBy: string | null;
+            estimatedDuration: number | null;
+            difficulty: string | null;
+            industry: string | null;
+            equipmentType: string | null;
+            parentId: string | null;
+            isLatestVersion: boolean;
         };
         workOrder: {
             id: string;
@@ -27,10 +40,10 @@ export declare class InspectionsController {
             createdAt: Date;
             updatedAt: Date;
             description: string;
+            status: string;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
-            status: string;
             assignedTo: string;
             priority: string;
         };
@@ -65,6 +78,19 @@ export declare class InspectionsController {
             templateId: string;
             description: string;
             schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            category: string;
+            tags: string[];
+            version: string;
+            status: string;
+            isPublic: boolean;
+            createdBy: string | null;
+            lastModifiedBy: string | null;
+            estimatedDuration: number | null;
+            difficulty: string | null;
+            industry: string | null;
+            equipmentType: string | null;
+            parentId: string | null;
+            isLatestVersion: boolean;
         };
         workOrder: {
             id: string;
@@ -72,10 +98,10 @@ export declare class InspectionsController {
             createdAt: Date;
             updatedAt: Date;
             description: string;
+            status: string;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
-            status: string;
             assignedTo: string;
             priority: string;
         };
@@ -98,6 +124,19 @@ export declare class InspectionsController {
             templateId: string;
             description: string;
             schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            category: string;
+            tags: string[];
+            version: string;
+            status: string;
+            isPublic: boolean;
+            createdBy: string | null;
+            lastModifiedBy: string | null;
+            estimatedDuration: number | null;
+            difficulty: string | null;
+            industry: string | null;
+            equipmentType: string | null;
+            parentId: string | null;
+            isLatestVersion: boolean;
         };
         workOrder: {
             id: string;
@@ -105,10 +144,10 @@ export declare class InspectionsController {
             createdAt: Date;
             updatedAt: Date;
             description: string;
+            status: string;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
-            status: string;
             assignedTo: string;
             priority: string;
         };

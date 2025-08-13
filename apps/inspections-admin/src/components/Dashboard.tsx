@@ -305,7 +305,7 @@ export function Dashboard() {
               </DropdownMenuContent>
             </DropdownMenu>
             <button 
-              onClick={() => navigate('/inspections')}
+              onClick={() => navigate('/templates')}
               className="flex flex-col items-center gap-2 p-4 border rounded-lg hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <ClipboardList className="h-8 w-8 text-purple-600" />

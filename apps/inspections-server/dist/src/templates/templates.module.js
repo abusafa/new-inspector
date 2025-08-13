@@ -9,14 +9,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TemplatesModule = void 0;
 const common_1 = require("@nestjs/common");
 const templates_controller_1 = require("./templates.controller");
+const template_builder_controller_1 = require("./template-builder.controller");
+const template_builder_service_1 = require("./template-builder.service");
 const prisma_service_1 = require("../prisma.service");
 let TemplatesModule = class TemplatesModule {
 };
 exports.TemplatesModule = TemplatesModule;
 exports.TemplatesModule = TemplatesModule = __decorate([
     (0, common_1.Module)({
-        controllers: [templates_controller_1.TemplatesController],
-        providers: [prisma_service_1.PrismaService],
+        controllers: [templates_controller_1.TemplatesController, template_builder_controller_1.TemplateBuilderController],
+        providers: [prisma_service_1.PrismaService, template_builder_service_1.TemplateBuilderService],
+        exports: [template_builder_service_1.TemplateBuilderService],
     })
 ], TemplatesModule);
 //# sourceMappingURL=templates.module.js.map

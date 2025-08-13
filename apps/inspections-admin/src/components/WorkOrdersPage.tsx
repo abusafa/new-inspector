@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -200,6 +201,7 @@ function WorkOrderCard({
 }
 
 export function WorkOrdersPage() {
+  const navigate = useNavigate();
   const { data: workOrders, loading, error, refetch } = useWorkOrders();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
@@ -361,7 +363,7 @@ export function WorkOrdersPage() {
                 <Plus className="h-4 w-4 mr-2" />
                 Create Template
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/templates')}>
                 <Eye className="h-4 w-4 mr-2" />
                 View Templates
               </DropdownMenuItem>

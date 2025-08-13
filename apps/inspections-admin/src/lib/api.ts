@@ -82,6 +82,24 @@ export interface InspectionTemplate {
   schemaJson: any;
   createdAt: string;
   updatedAt: string;
+  // Enhanced template management fields
+  category: string;
+  tags: string[];
+  version: string;
+  status: 'draft' | 'published' | 'archived';
+  isPublic: boolean;
+  createdBy?: string;
+  lastModifiedBy?: string;
+  // Template metadata
+  estimatedDuration?: number;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  industry?: string;
+  equipmentType?: string;
+  // Version control
+  parentId?: string;
+  isLatestVersion: boolean;
+  // Usage statistics
+  usageCount?: number;
 }
 
 export interface DashboardStats {
@@ -165,19 +183,130 @@ export const api = {
 
   // Templates
   templates: {
-    list: () => fetchApi<InspectionTemplate[]>('/templates'),
+    list: (params?: {
+      category?: string;
+      status?: string;
+      search?: string;
+      tags?: string[];
+      industry?: string;
+      equipmentType?: string;
+      createdBy?: string;
+      isPublic?: boolean;
+      page?: number;
+      limit?: number;
+      sortBy?: string;
+      sortOrder?: string;
+    }) => {
+      const queryParams = new URLSearchParams();
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            if (Array.isArray(value)) {
+              value.forEach(v => queryParams.append(key, v.toString()));
+            } else {
+              queryParams.append(key, value.toString());
+            }
+          }
+        });
+      }
+      return fetchApi<{
+        data: InspectionTemplate[];
+        pagination: {
+          page: number;
+          limit: number;
+          total: number;
+          pages: number;
+        };
+      }>(`/templates?${queryParams.toString()}`);
+    },
     get: (id: string) => fetchApi<InspectionTemplate>(`/templates/${id}`),
-    create: (data: Partial<InspectionTemplate>) => fetchApi<InspectionTemplate>('/templates', {
+    preview: (id: string) => fetchApi<{
+      valid: boolean;
+      errors: any[];
+      template: any;
+      metadata: {
+        totalQuestions: number;
+        totalSections: number;
+        estimatedDuration?: number;
+        difficulty?: string;
+      };
+    }>(`/templates/${id}/preview`),
+    versions: (id: string) => fetchApi<any[]>(`/templates/${id}/versions`),
+    categories: () => fetchApi<Array<{ name: string; count: number }>>('/templates/categories'),
+    tags: () => fetchApi<Array<{ name: string; count: number }>>('/templates/tags'),
+    create: (data: any) => fetchApi<InspectionTemplate>('/templates', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
-    update: (id: string, data: Partial<InspectionTemplate>) => fetchApi<InspectionTemplate>(`/templates/${id}`, {
+    update: (id: string, data: any) => fetchApi<InspectionTemplate>(`/templates/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
+    }),
+    duplicate: (id: string, data: { name: string; description?: string; category?: string; createdBy?: string }) => 
+      fetchApi<InspectionTemplate>(`/templates/${id}/duplicate`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    createVersion: (id: string, data: { version: string; createdBy?: string }) =>
+      fetchApi<InspectionTemplate>(`/templates/${id}/new-version`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    publish: (id: string, publishedBy?: string) => fetchApi<InspectionTemplate>(`/templates/${id}/publish`, {
+      method: 'PUT',
+      body: JSON.stringify({ publishedBy }),
+    }),
+    archive: (id: string, archivedBy?: string) => fetchApi<InspectionTemplate>(`/templates/${id}/archive`, {
+      method: 'PUT',
+      body: JSON.stringify({ archivedBy }),
     }),
     delete: (id: string) => fetchApi<void>(`/templates/${id}`, {
       method: 'DELETE',
     }),
+  },
+
+  // Template Builder
+  templateBuilder: {
+    getComponents: () => fetchApi<any[]>('/template-builder/components'),
+    getPatterns: () => fetchApi<any[]>('/template-builder/patterns'),
+    generateFromPattern: (patternType: string, options: any) => 
+      fetchApi<any>(`/template-builder/generate/${patternType}`, {
+        method: 'POST',
+        body: JSON.stringify(options),
+      }),
+    applyOperations: (templateId: string, operations: any[]) =>
+      fetchApi<any>(`/template-builder/${templateId}/operations`, {
+        method: 'POST',
+        body: JSON.stringify({ operations }),
+      }),
+    addComponent: (templateId: string, data: {
+      componentType: string;
+      parentId?: string;
+      position?: number;
+      customConfig?: any;
+    }) => fetchApi<any>(`/template-builder/${templateId}/add-component`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+    updateItem: (templateId: string, itemId: string, data: any) =>
+      fetchApi<any>(`/template-builder/${templateId}/update-item/${itemId}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    duplicateItem: (templateId: string, itemId: string, data: { parentId?: string; position?: number }) =>
+      fetchApi<any>(`/template-builder/${templateId}/duplicate-item/${itemId}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    moveItem: (templateId: string, itemId: string, data: { parentId?: string; position?: number }) =>
+      fetchApi<any>(`/template-builder/${templateId}/move-item/${itemId}`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    deleteItem: (templateId: string, itemId: string) =>
+      fetchApi<any>(`/template-builder/${templateId}/delete-item/${itemId}`, {
+        method: 'POST',
+      }),
   },
 
   // Dashboard
