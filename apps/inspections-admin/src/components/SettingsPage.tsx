@@ -2,87 +2,147 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SystemHealthCard } from '@/components/settings/SystemHealthCard';
+import { SystemConfigCard } from '@/components/settings/SystemConfigCard';
+import { DataManagementCard } from '@/components/settings/DataManagementCard';
+import { UserProfile } from '@/components/auth/UserProfile';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
-  Settings,
-  Database,
-  Bell,
-  Shield,
-  Mail,
-  Globe,
-  Smartphone,
-  HardDrive,
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  RefreshCw,
-  Save,
+  Settings, 
+  Server, 
+  Database, 
+  Shield, 
+  Bell, 
   Download,
   Upload,
-  Trash2,
-  Info
+  RefreshCw,
+  CheckCircle,
+  AlertTriangle,
+  Users,
+  Activity,
+  User,
+  Palette,
+  Globe,
+  Mail,
+  HardDrive,
+  Clock,
+  Key
 } from 'lucide-react';
 
-interface SystemHealth {
-  database: 'healthy' | 'degraded' | 'error';
-  api: 'healthy' | 'degraded' | 'error';
-  storage: number; // percentage used
-  uptime: string;
-}
-
-function getHealthColor(status: string) {
-  switch (status) {
-    case 'healthy':
-      return 'text-green-600';
-    case 'degraded':
-      return 'text-yellow-600';
-    case 'error':
-      return 'text-red-600';
-    default:
-      return 'text-gray-600';
-  }
-}
-
-function getHealthIcon(status: string) {
-  switch (status) {
-    case 'healthy':
-      return CheckCircle2;
-    case 'degraded':
-      return AlertTriangle;
-    case 'error':
-      return AlertTriangle;
-    default:
-      return Info;
-  }
+interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  user: string;
+  action: string;
+  resource: string;
+  details: string;
+  ipAddress: string;
+  userAgent: string;
 }
 
 export function SettingsPage() {
-  const [systemHealth, setSystemHealth] = useState<SystemHealth>({
-    database: 'healthy',
-    api: 'healthy',
-    storage: 45,
-    uptime: '7 days, 14 hours',
-  });
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('overview');
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [loadingLogs, setLoadingLogs] = useState(false);
 
-  const checkSystemHealth = async () => {
-    setLoading(true);
+  const mockAuditLogs: AuditLogEntry[] = [
+    {
+      id: '1',
+      timestamp: new Date().toISOString(),
+      user: 'Emily Davis',
+      action: 'LOGIN',
+      resource: 'Authentication',
+      details: 'Successful login',
+      ipAddress: '192.168.1.100',
+      userAgent: 'Chrome 120.0.0.0'
+    },
+    {
+      id: '2',
+      timestamp: new Date(Date.now() - 300000).toISOString(),
+      user: 'Admin User',
+      action: 'UPDATE',
+      resource: 'User',
+      details: 'Updated user role for John Inspector',
+      ipAddress: '192.168.1.101',
+      userAgent: 'Chrome 120.0.0.0'
+    },
+    {
+      id: '3',
+      timestamp: new Date(Date.now() - 600000).toISOString(),
+      user: 'Emily Davis',
+      action: 'CREATE',
+      resource: 'WorkOrder',
+      details: 'Created work order WO-2024-001',
+      ipAddress: '192.168.1.100',
+      userAgent: 'Chrome 120.0.0.0'
+    },
+    {
+      id: '4',
+      timestamp: new Date(Date.now() - 900000).toISOString(),
+      user: 'John Inspector',
+      action: 'COMPLETE',
+      resource: 'Inspection',
+      details: 'Completed inspection INS-2024-045',
+      ipAddress: '192.168.1.102',
+      userAgent: 'Mobile Safari 17.0'
+    },
+    {
+      id: '5',
+      timestamp: new Date(Date.now() - 1200000).toISOString(),
+      user: 'Admin User',
+      action: 'DELETE',
+      resource: 'Template',
+      details: 'Deleted template TPL-OLD-001',
+      ipAddress: '192.168.1.101',
+      userAgent: 'Chrome 120.0.0.0'
+    }
+  ];
+
+  const loadAuditLogs = async () => {
+    setLoadingLogs(true);
     try {
-      const health = await api.health();
-      setSystemHealth(prev => ({
-        ...prev,
-        database: health.status === 'ok' ? 'healthy' : 'degraded',
-        api: 'healthy',
-      }));
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setAuditLogs(mockAuditLogs);
     } catch (error) {
-      setSystemHealth(prev => ({
-        ...prev,
-        database: 'error',
-        api: 'error',
-      }));
+      console.error('Failed to load audit logs:', error);
     } finally {
-      setLoading(false);
+      setLoadingLogs(false);
+    }
+  };
+
+  const getActionColor = (action: string) => {
+    switch (action) {
+      case 'LOGIN':
+      case 'COMPLETE':
+        return 'text-green-600 bg-green-100 border-green-200';
+      case 'CREATE':
+        return 'text-blue-600 bg-blue-100 border-blue-200';
+      case 'UPDATE':
+        return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+      case 'DELETE':
+        return 'text-red-600 bg-red-100 border-red-200';
+      default:
+        return 'text-gray-600 bg-gray-100 border-gray-200';
+    }
+  };
+
+  const getActionIcon = (action: string) => {
+    switch (action) {
+      case 'LOGIN':
+        return <Key className="h-3 w-3" />;
+      case 'CREATE':
+        return <CheckCircle className="h-3 w-3" />;
+      case 'UPDATE':
+        return <RefreshCw className="h-3 w-3" />;
+      case 'DELETE':
+        return <AlertTriangle className="h-3 w-3" />;
+      case 'COMPLETE':
+        return <CheckCircle className="h-3 w-3" />;
+      default:
+        return <Activity className="h-3 w-3" />;
     }
   };
 
@@ -91,346 +151,269 @@ export function SettingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Settings</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Settings className="h-6 w-6" />
+            Settings & Administration
+          </h1>
           <p className="text-muted-foreground">
-            System configuration and administration
+            System configuration, monitoring, and administrative tools
           </p>
         </div>
-        <Button onClick={checkSystemHealth} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          Check Health
-        </Button>
+        {user && (
+          <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+            {user.role}
+          </Badge>
+        )}
       </div>
 
-      {/* System Health */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            System Health
-          </CardTitle>
-          <CardDescription>
-            Current system status and performance metrics
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                systemHealth.database === 'healthy' ? 'bg-green-100' : 
-                systemHealth.database === 'degraded' ? 'bg-yellow-100' : 'bg-red-100'
-              }`}>
-                {(() => {
-                  const Icon = getHealthIcon(systemHealth.database);
-                  return <Icon className={`h-4 w-4 ${getHealthColor(systemHealth.database)}`} />;
-                })()}
-              </div>
-              <div>
-                <p className="font-medium">Database</p>
-                <p className={`text-sm capitalize ${getHealthColor(systemHealth.database)}`}>
-                  {systemHealth.database}
-                </p>
-              </div>
-            </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="system" className="flex items-center gap-2">
+            <Settings className="h-4 w-4" />
+            System
+          </TabsTrigger>
+          <TabsTrigger value="database" className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Data
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Security
+          </TabsTrigger>
+          <TabsTrigger value="profile" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            Profile
+          </TabsTrigger>
+          <TabsTrigger value="logs" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Logs
+          </TabsTrigger>
+        </TabsList>
 
-            <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                systemHealth.api === 'healthy' ? 'bg-green-100' : 
-                systemHealth.api === 'degraded' ? 'bg-yellow-100' : 'bg-red-100'
-              }`}>
-                {(() => {
-                  const Icon = getHealthIcon(systemHealth.api);
-                  return <Icon className={`h-4 w-4 ${getHealthColor(systemHealth.api)}`} />;
-                })()}
-              </div>
-              <div>
-                <p className="font-medium">API</p>
-                <p className={`text-sm capitalize ${getHealthColor(systemHealth.api)}`}>
-                  {systemHealth.api}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <HardDrive className="h-4 w-4 text-blue-600" />
-              </div>
-              <div>
-                <p className="font-medium">Storage</p>
-                <p className="text-sm text-muted-foreground">
-                  {systemHealth.storage}% used
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 border rounded-lg">
-              <div className="h-8 w-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <Activity className="h-4 w-4 text-purple-600" />
-              </div>
-              <div>
-                <p className="font-medium">Uptime</p>
-                <p className="text-sm text-muted-foreground">
-                  {systemHealth.uptime}
-                </p>
-              </div>
-            </div>
+        <TabsContent value="overview" className="space-y-6 mt-6">
+          <div className="grid gap-6 md:grid-cols-2">
+            <SystemHealthCard />
+            
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="h-5 w-5" />
+                  Quick Settings
+                </CardTitle>
+                <CardDescription>
+                  Commonly accessed system settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('system')}
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  System Configuration
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('database')}
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Data Management
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('security')}
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  Security Settings
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab('logs')}
+                >
+                  <Activity className="h-4 w-4 mr-2" />
+                  View Audit Logs
+                </Button>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
+        </TabsContent>
 
-      {/* Configuration Sections */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* General Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5" />
-              General Settings
-            </CardTitle>
-            <CardDescription>
-              Basic system configuration
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">System Name</label>
-              <Input defaultValue="SafetyCheck Admin" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Organization</label>
-              <Input defaultValue="Safety & Compliance Department" />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Time Zone</label>
-              <Input defaultValue="America/New_York" />
-            </div>
-            <Button className="w-full">
-              <Save className="h-4 w-4 mr-2" />
-              Save General Settings
-            </Button>
-          </CardContent>
-        </Card>
+        <TabsContent value="system" className="space-y-6 mt-6">
+          <SystemConfigCard />
+        </TabsContent>
 
-        {/* Notification Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bell className="h-5 w-5" />
-              Notifications
-            </CardTitle>
-            <CardDescription>
-              Configure system notifications and alerts
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Email Notifications</p>
-                <p className="text-sm text-muted-foreground">System alerts via email</p>
-              </div>
-              <Badge variant="default">Enabled</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Push Notifications</p>
-                <p className="text-sm text-muted-foreground">Real-time browser alerts</p>
-              </div>
-              <Badge variant="secondary">Disabled</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">SMS Alerts</p>
-                <p className="text-sm text-muted-foreground">Critical system alerts</p>
-              </div>
-              <Badge variant="default">Enabled</Badge>
-            </div>
-            <Button className="w-full" variant="outline">
-              <Settings className="h-4 w-4 mr-2" />
-              Configure Notifications
-            </Button>
-          </CardContent>
-        </Card>
+        <TabsContent value="database" className="space-y-6 mt-6">
+          <DataManagementCard />
+        </TabsContent>
 
-        {/* Security Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
-              Security
-            </CardTitle>
-            <CardDescription>
-              User authentication and access control
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Two-Factor Authentication</p>
-                <p className="text-sm text-muted-foreground">Enhanced security for admin accounts</p>
-              </div>
-              <Badge variant="default">Required</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Session Timeout</p>
-                <p className="text-sm text-muted-foreground">Auto logout after inactivity</p>
-              </div>
-              <Badge variant="secondary">30 minutes</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Password Policy</p>
-                <p className="text-sm text-muted-foreground">Minimum requirements</p>
-              </div>
-              <Badge variant="default">Strong</Badge>
-            </div>
-            <Button className="w-full" variant="outline">
-              <Shield className="h-4 w-4 mr-2" />
-              Manage Security
-            </Button>
-          </CardContent>
-        </Card>
+        <TabsContent value="security" className="space-y-6 mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Security & Access Control
+              </CardTitle>
+              <CardDescription>
+                Configure security settings and access controls
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-4">
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Key className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium">Password Policy</div>
+                      <div className="text-sm text-muted-foreground">Configure password requirements</div>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">Configure</Button>
+                </div>
 
-        {/* Integration Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5" />
-              Integrations
-            </CardTitle>
-            <CardDescription>
-              External system connections and APIs
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Email Service</p>
-                <p className="text-sm text-muted-foreground">SMTP configuration</p>
-              </div>
-              <Badge variant="default">Connected</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Mobile App Sync</p>
-                <p className="text-sm text-muted-foreground">Real-time data synchronization</p>
-              </div>
-              <Badge variant="default">Active</Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium">Backup Service</p>
-                <p className="text-sm text-muted-foreground">Automated data backups</p>
-              </div>
-              <Badge variant="default">Daily</Badge>
-            </div>
-            <Button className="w-full" variant="outline">
-              <Settings className="h-4 w-4 mr-2" />
-              Configure Integrations
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Shield className="h-5 w-5 text-green-600" />
+                    <div>
+                      <div className="font-medium">Two-Factor Authentication</div>
+                      <div className="text-sm text-muted-foreground">Manage 2FA settings</div>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">Manage</Button>
+                </div>
 
-      {/* Data Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Database className="h-5 w-5" />
-            Data Management
-          </CardTitle>
-          <CardDescription>
-            Backup, restore, and data maintenance operations
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="space-y-2">
-              <h4 className="font-medium">Backup & Restore</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                Create and manage system backups
-              </p>
-              <div className="space-y-2">
-                <Button className="w-full" variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Create Backup
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Restore Backup
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Globe className="h-5 w-5 text-purple-600" />
+                    <div>
+                      <div className="font-medium">IP Whitelist</div>
+                      <div className="text-sm text-muted-foreground">Manage allowed IP addresses</div>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">Configure</Button>
+                </div>
+
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Clock className="h-5 w-5 text-orange-600" />
+                    <div>
+                      <div className="font-medium">Session Management</div>
+                      <div className="text-sm text-muted-foreground">Configure session timeouts</div>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">Settings</Button>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="font-medium mb-3">Security Status</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center p-3 border rounded-lg">
+                    <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                    <div className="text-sm font-medium">SSL Enabled</div>
+                  </div>
+                  <div className="text-center p-3 border rounded-lg">
+                    <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                    <div className="text-sm font-medium">Firewall Active</div>
+                  </div>
+                  <div className="text-center p-3 border rounded-lg">
+                    <AlertTriangle className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
+                    <div className="text-sm font-medium">2FA Optional</div>
+                  </div>
+                  <div className="text-center p-3 border rounded-lg">
+                    <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                    <div className="text-sm font-medium">Audit Enabled</div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="profile" className="space-y-6 mt-6">
+          {user && <UserProfile variant="card" showFullProfile={true} />}
+        </TabsContent>
+
+        <TabsContent value="logs" className="space-y-6 mt-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Activity className="h-5 w-5" />
+                  <CardTitle>Audit Logs</CardTitle>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={loadAuditLogs}
+                  disabled={loadingLogs}
+                >
+                  <RefreshCw className={`h-4 w-4 ${loadingLogs ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="font-medium">Data Export</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                Export system data for analysis
-              </p>
-              <div className="space-y-2">
-                <Button className="w-full" variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Users
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export Work Orders
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h4 className="font-medium">Maintenance</h4>
-              <p className="text-sm text-muted-foreground mb-3">
-                System cleanup and optimization
-              </p>
-              <div className="space-y-2">
-                <Button className="w-full" variant="outline">
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Optimize Database
-                </Button>
-                <Button className="w-full" variant="outline">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Clear Cache
-                </Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* System Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Info className="h-5 w-5" />
-            System Information
-          </CardTitle>
-          <CardDescription>
-            Version details and system specifications
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Application Version</p>
-              <p className="font-medium">v2.1.0</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Database Version</p>
-              <p className="font-medium">PostgreSQL 15.2</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Node.js Version</p>
-              <p className="font-medium">v18.17.0</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Environment</p>
-              <Badge variant="secondary">Production</Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+              <CardDescription>
+                System activity and user action logs
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingLogs ? (
+                <div className="space-y-3">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-16 bg-muted rounded animate-pulse" />
+                  ))}
+                </div>
+              ) : auditLogs.length > 0 ? (
+                <div className="space-y-3">
+                  {auditLogs.map((log) => (
+                    <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        <Badge className={`text-xs ${getActionColor(log.action)}`}>
+                          {getActionIcon(log.action)}
+                          <span className="ml-1">{log.action}</span>
+                        </Badge>
+                        <div>
+                          <div className="font-medium">{log.user}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {log.action.toLowerCase()} {log.resource.toLowerCase()} • {log.details}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right text-sm text-muted-foreground">
+                        <div>{new Date(log.timestamp).toLocaleString()}</div>
+                        <div className="text-xs">{log.ipAddress}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="font-medium mb-2">No Logs Available</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Click refresh to load recent audit logs.
+                  </p>
+                  <Button onClick={loadAuditLogs}>
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Load Logs
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

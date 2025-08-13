@@ -59,6 +59,70 @@ let InspectionsController = class InspectionsController {
             work_order_id: i.workOrderId,
         };
     }
+    async create(body) {
+        const { inspectionId, workOrderId, templateId, status = 'not-started', required = true, order = 1, resultJson = {}, } = body;
+        const inspection = await this.prisma.inspection.create({
+            data: {
+                inspectionId,
+                workOrderId,
+                templateId,
+                status,
+                required,
+                order,
+                resultJson,
+            },
+            include: { template: true, workOrder: true },
+        });
+        return {
+            id: inspection.id,
+            inspectionId: inspection.inspectionId,
+            workOrderId: inspection.workOrderId,
+            templateId: inspection.templateId,
+            status: inspection.status,
+            required: inspection.required,
+            order: inspection.order,
+            completedAt: inspection.completedAt,
+            resultJson: inspection.resultJson,
+            template: inspection.template,
+            workOrder: inspection.workOrder,
+        };
+    }
+    async update(id, body) {
+        const { inspectionId, workOrderId, templateId, status, required, order, resultJson, } = body;
+        const inspection = await this.prisma.inspection.update({
+            where: { id },
+            data: {
+                ...(inspectionId && { inspectionId }),
+                ...(workOrderId && { workOrderId }),
+                ...(templateId && { templateId }),
+                ...(status && { status }),
+                ...(required !== undefined && { required }),
+                ...(order !== undefined && { order }),
+                ...(resultJson && { resultJson }),
+                ...(status === 'completed' && { completedAt: new Date() }),
+            },
+            include: { template: true, workOrder: true },
+        });
+        return {
+            id: inspection.id,
+            inspectionId: inspection.inspectionId,
+            workOrderId: inspection.workOrderId,
+            templateId: inspection.templateId,
+            status: inspection.status,
+            required: inspection.required,
+            order: inspection.order,
+            completedAt: inspection.completedAt,
+            resultJson: inspection.resultJson,
+            template: inspection.template,
+            workOrder: inspection.workOrder,
+        };
+    }
+    async delete(id) {
+        await this.prisma.inspection.delete({
+            where: { id },
+        });
+        return { success: true };
+    }
     async complete(id, body) {
         const { resultJson } = body;
         const updated = await this.prisma.inspection.update({
@@ -87,6 +151,28 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], InspectionsController.prototype, "get", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], InspectionsController.prototype, "create", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], InspectionsController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], InspectionsController.prototype, "delete", null);
 __decorate([
     (0, common_1.Post)(':id/complete'),
     __param(0, (0, common_1.Param)('id')),

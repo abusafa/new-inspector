@@ -7,7 +7,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useUsers } from '@/hooks/useApi';
 import { formatDate, formatDateTime, formatPhoneNumber } from '@/lib/utils';
 import type { User } from '@/lib/api';
+import { api } from '@/lib/api';
 import { UserModal } from '@/components/modals/UserModal';
+import { DeleteConfirmationDialog } from '@/components/modals/DeleteConfirmationDialog';
+import { FilterDialog, type FilterCriteria } from '@/components/modals/FilterDialog';
+import { ExportDialog } from '@/components/modals/ExportDialog';
+import { UserRoleDialog } from '@/components/modals/UserRoleDialog';
+import { UserStatusDialog } from '@/components/modals/UserStatusDialog';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Search, 
   Plus, 
@@ -26,7 +33,8 @@ import {
   UserCheck,
   UserX,
   Clock,
-  Settings
+  Settings,
+  Download
 } from 'lucide-react';
 
 function getRoleColor(role: string) {
@@ -48,10 +56,12 @@ function getRoleColor(role: string) {
 
 function UserCard({ 
   user, 
-  onEdit 
+  onEdit,
+  onDelete
 }: { 
   user: User;
   onEdit: (user: User) => void;
+  onDelete: (user: User) => void;
 }) {
   const initials = user.name
     .split(' ')
@@ -147,6 +157,15 @@ function UserCard({
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDelete(user)}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
             </div>
           </div>
         </div>
@@ -157,19 +176,63 @@ function UserCard({
 
 export function UsersPage() {
   const { data: users, loading, error, refetch } = useUsers();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterCriteria>({});
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
 
-  const filteredUsers = users?.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.phoneNumber.includes(searchTerm) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.location?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || [];
+  const filteredUsers = users?.filter(user => {
+    // Text search
+    const searchQuery = filters.search || searchTerm;
+    if (searchQuery) {
+      const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.phoneNumber.includes(searchQuery) ||
+        user.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.department?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.location?.toLowerCase().includes(searchQuery.toLowerCase());
+      if (!matchesSearch) return false;
+    }
+
+    // Role filter
+    if (filters.role && user.role !== filters.role) return false;
+
+    // Department filter
+    if (filters.department && user.department !== filters.department) return false;
+
+    // Location filter
+    if (filters.location && user.location !== filters.location) return false;
+
+    return true;
+  }) || [];
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+    
+    try {
+      await api.users.delete(userToDelete.id);
+      toast({
+        title: "User deleted",
+        description: `${userToDelete.name} has been deleted successfully.`,
+      });
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete user. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Failed to delete user:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -245,6 +308,27 @@ export function UsersPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
+          <Button 
+            onClick={() => setExportDialogOpen(true)}
+            variant="outline"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <Button 
+            onClick={() => setRoleDialogOpen(true)}
+            variant="outline"
+          >
+            <Shield className="h-4 w-4 mr-2" />
+            Manage Roles
+          </Button>
+          <Button 
+            onClick={() => setStatusDialogOpen(true)}
+            variant="outline"
+          >
+            <UserCheck className="h-4 w-4 mr-2" />
+            Manage Status
+          </Button>
           <Button onClick={() => {
             setSelectedUser(null);
             setModalOpen(true);
@@ -268,9 +352,18 @@ export function UsersPage() {
             />
           </div>
         </div>
-        <Button variant="outline">
+        <Button 
+          variant="outline"
+          onClick={() => setFilterDialogOpen(true)}
+          className={Object.keys(filters).length > 0 ? "border-primary text-primary" : ""}
+        >
           <Filter className="h-4 w-4 mr-2" />
           Filter
+          {Object.keys(filters).length > 0 && (
+            <Badge variant="secondary" className="ml-2">
+              {Object.keys(filters).length}
+            </Badge>
+          )}
         </Button>
         <div className="flex items-center border rounded-lg">
           <Button
@@ -388,6 +481,10 @@ export function UsersPage() {
                 setSelectedUser(u);
                 setModalOpen(true);
               }}
+              onDelete={(u) => {
+                setUserToDelete(u);
+                setDeleteDialogOpen(true);
+              }}
             />
           ))}
         </div>
@@ -443,9 +540,29 @@ export function UsersPage() {
                       {formatDateTime(user.loginTime)}
                     </TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setModalOpen(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setUserToDelete(user);
+                            setDeleteDialogOpen(true);
+                          }}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
@@ -473,6 +590,49 @@ export function UsersPage() {
         onOpenChange={setModalOpen}
         user={selectedUser}
         onSave={refetch}
+      />
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete User"
+        description="Are you sure you want to delete this user? This action cannot be undone and will remove all associated data."
+        itemName={userToDelete?.name}
+        onConfirm={handleDeleteUser}
+      />
+
+      <FilterDialog
+        open={filterDialogOpen}
+        onOpenChange={setFilterDialogOpen}
+        filters={filters}
+        onFiltersChange={setFilters}
+        type="users"
+        availableOptions={{
+          roles: [...new Set(users?.map(u => u.role) || [])],
+          departments: [...new Set(users?.map(u => u.department).filter((dept): dept is string => Boolean(dept)) || [])],
+          locations: [...new Set(users?.map(u => u.location).filter((loc): loc is string => Boolean(loc)) || [])],
+        }}
+      />
+
+      <ExportDialog
+        open={exportDialogOpen}
+        onOpenChange={setExportDialogOpen}
+        data={{ users: filteredUsers }}
+        type="users"
+      />
+
+      <UserRoleDialog
+        open={roleDialogOpen}
+        onOpenChange={setRoleDialogOpen}
+        users={users || []}
+        onUpdate={refetch}
+      />
+
+      <UserStatusDialog
+        open={statusDialogOpen}
+        onOpenChange={setStatusDialogOpen}
+        users={users || []}
+        onUpdate={refetch}
       />
     </div>
   );

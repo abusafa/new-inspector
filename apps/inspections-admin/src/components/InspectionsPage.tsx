@@ -9,6 +9,11 @@ import { formatDate, formatDateTime } from '@/lib/utils';
 import type { Inspection, InspectionTemplate } from '@/lib/api';
 import { InspectionDetailModal } from '@/components/modals/InspectionDetailModal';
 import { TemplateDetailModal } from '@/components/modals/TemplateDetailModal';
+import { TemplateModal } from '@/components/modals/TemplateModal';
+import { InspectionModal } from '@/components/modals/InspectionModal';
+import { DeleteConfirmationDialog } from '@/components/modals/DeleteConfirmationDialog';
+import { api } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Search, 
   Plus, 
@@ -42,10 +47,14 @@ function getStatusColor(status: string) {
 
 function TemplateCard({ 
   template, 
-  onView 
+  onView,
+  onEdit,
+  onDelete
 }: { 
   template: InspectionTemplate;
   onView: (template: InspectionTemplate) => void;
+  onEdit: (template: InspectionTemplate) => void;
+  onDelete: (template: InspectionTemplate) => void;
 }) {
   const schema = template.schemaJson as any;
   const headerItemsCount = schema?.header_items?.length || 0;
@@ -131,9 +140,22 @@ function TemplateCard({
                 <Copy className="h-4 w-4 mr-1" />
                 Clone
               </Button>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onEdit(template)}
+              >
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDelete(template)}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
               </Button>
             </div>
           </div>
@@ -146,12 +168,19 @@ function TemplateCard({
 export function InspectionsPage() {
   const { data: inspections, loading: inspectionsLoading, error: inspectionsError, refetch: refetchInspections } = useInspections();
   const { data: templates, loading: templatesLoading, error: templatesError, refetch: refetchTemplates } = useTemplates();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<'inspections' | 'templates'>('inspections');
   const [inspectionDetailModalOpen, setInspectionDetailModalOpen] = useState(false);
   const [templateDetailModalOpen, setTemplateDetailModalOpen] = useState(false);
+  const [templateModalOpen, setTemplateModalOpen] = useState(false);
+  const [inspectionModalOpen, setInspectionModalOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<InspectionTemplate | null>(null);
+  const [templateToEdit, setTemplateToEdit] = useState<InspectionTemplate | null>(null);
+  const [templateToDelete, setTemplateToDelete] = useState<InspectionTemplate | null>(null);
+  const [inspectionToEdit, setInspectionToEdit] = useState<Inspection | null>(null);
 
   const filteredInspections = inspections?.filter(inspection =>
     inspection.inspectionId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -165,6 +194,26 @@ export function InspectionsPage() {
 
   const loading = inspectionsLoading || templatesLoading;
   const error = inspectionsError || templatesError;
+
+  const handleDeleteTemplate = async () => {
+    if (!templateToDelete) return;
+    
+    try {
+      await api.templates.delete(templateToDelete.id);
+      toast({
+        title: "Template deleted",
+        description: `"${templateToDelete.name}" has been deleted successfully.`,
+      });
+      refetchTemplates();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete template. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Failed to delete template:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -229,7 +278,17 @@ export function InspectionsPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button>
+          <Button
+            onClick={() => {
+              if (activeTab === 'templates') {
+                setTemplateToEdit(null);
+                setTemplateModalOpen(true);
+              } else {
+                setInspectionToEdit(null);
+                setInspectionModalOpen(true);
+              }
+            }}
+          >
             <Plus className="h-4 w-4 mr-2" />
             {activeTab === 'templates' ? 'Create Template' : 'New Inspection'}
           </Button>
@@ -403,8 +462,15 @@ export function InspectionsPage() {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="h-4 w-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => {
+                          setInspectionToEdit(inspection);
+                          setInspectionModalOpen(true);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>
@@ -422,6 +488,14 @@ export function InspectionsPage() {
               onView={(template) => {
                 setSelectedTemplate(template);
                 setTemplateDetailModalOpen(true);
+              }}
+              onEdit={(template) => {
+                setTemplateToEdit(template);
+                setTemplateModalOpen(true);
+              }}
+              onDelete={(template) => {
+                setTemplateToDelete(template);
+                setDeleteDialogOpen(true);
               }}
             />
           ))}
@@ -466,6 +540,35 @@ export function InspectionsPage() {
         open={templateDetailModalOpen}
         onOpenChange={setTemplateDetailModalOpen}
         template={selectedTemplate}
+      />
+
+      <TemplateModal
+        open={templateModalOpen}
+        onOpenChange={setTemplateModalOpen}
+        template={templateToEdit}
+        onSave={() => {
+          refetchTemplates();
+          setTemplateToEdit(null);
+        }}
+      />
+
+      <InspectionModal
+        open={inspectionModalOpen}
+        onOpenChange={setInspectionModalOpen}
+        inspection={inspectionToEdit}
+        onSave={() => {
+          refetchInspections();
+          setInspectionToEdit(null);
+        }}
+      />
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete Template"
+        description="Are you sure you want to delete this template? This action cannot be undone and will remove all associated inspections."
+        itemName={templateToDelete?.name}
+        onConfirm={handleDeleteTemplate}
       />
     </div>
   );

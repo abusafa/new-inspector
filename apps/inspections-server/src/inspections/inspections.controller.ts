@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
 @Controller('inspections')
@@ -45,6 +45,96 @@ export class InspectionsController {
       order: i.order,
       work_order_id: i.workOrderId,
     };
+  }
+
+  @Post()
+  async create(@Body() body: any) {
+    const {
+      inspectionId,
+      workOrderId,
+      templateId,
+      status = 'not-started',
+      required = true,
+      order = 1,
+      resultJson = {},
+    } = body;
+
+    const inspection = await this.prisma.inspection.create({
+      data: {
+        inspectionId,
+        workOrderId,
+        templateId,
+        status,
+        required,
+        order,
+        resultJson,
+      },
+      include: { template: true, workOrder: true },
+    });
+
+    return {
+      id: inspection.id,
+      inspectionId: inspection.inspectionId,
+      workOrderId: inspection.workOrderId,
+      templateId: inspection.templateId,
+      status: inspection.status,
+      required: inspection.required,
+      order: inspection.order,
+      completedAt: inspection.completedAt,
+      resultJson: inspection.resultJson,
+      template: inspection.template,
+      workOrder: inspection.workOrder,
+    };
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    const {
+      inspectionId,
+      workOrderId,
+      templateId,
+      status,
+      required,
+      order,
+      resultJson,
+    } = body;
+
+    const inspection = await this.prisma.inspection.update({
+      where: { id },
+      data: {
+        ...(inspectionId && { inspectionId }),
+        ...(workOrderId && { workOrderId }),
+        ...(templateId && { templateId }),
+        ...(status && { status }),
+        ...(required !== undefined && { required }),
+        ...(order !== undefined && { order }),
+        ...(resultJson && { resultJson }),
+        ...(status === 'completed' && { completedAt: new Date() }),
+      },
+      include: { template: true, workOrder: true },
+    });
+
+    return {
+      id: inspection.id,
+      inspectionId: inspection.inspectionId,
+      workOrderId: inspection.workOrderId,
+      templateId: inspection.templateId,
+      status: inspection.status,
+      required: inspection.required,
+      order: inspection.order,
+      completedAt: inspection.completedAt,
+      resultJson: inspection.resultJson,
+      template: inspection.template,
+      workOrder: inspection.workOrder,
+    };
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    await this.prisma.inspection.delete({
+      where: { id },
+    });
+    return { success: true };
   }
 
   @Post(':id/complete')

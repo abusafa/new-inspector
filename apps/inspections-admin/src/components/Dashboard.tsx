@@ -14,6 +14,8 @@ import { useDashboardStats } from '@/hooks/useApi';
 import { formatDateTime } from '@/lib/utils';
 import { WorkOrderModal } from '@/components/modals/WorkOrderModal';
 import { UserModal } from '@/components/modals/UserModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { WithPermission } from '@/components/auth/ProtectedRoute';
 import { 
   FileCheck, 
   Users, 
@@ -25,12 +27,14 @@ import {
   Activity,
   ChevronDown,
   UserPlus,
-  Eye
+  Eye,
+  BarChart3
 } from 'lucide-react';
 
 export function Dashboard() {
   const { data: stats, loading, error, refetch } = useDashboardStats();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [workOrderModalOpen, setWorkOrderModalOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
 
@@ -95,11 +99,23 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold">
+            Welcome back, {user?.name?.split(' ')[0] || 'User'}!
+          </h1>
           <p className="text-muted-foreground">
-            Overview of inspections and work orders
+            {user?.role} Dashboard - Overview of inspections and work orders
           </p>
         </div>
+        {user && (
+          <div className="flex items-center gap-3">
+            <Badge className="bg-blue-100 text-blue-700 border-blue-200">
+              {user.role}
+            </Badge>
+            <Badge className="bg-green-100 text-green-700 border-green-200">
+              {user.department}
+            </Badge>
+          </div>
+        )}
         <button 
           onClick={refetch}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 flex items-center gap-2"
@@ -290,6 +306,15 @@ export function Dashboard() {
               <ClipboardList className="h-8 w-8 text-purple-600" />
               <span className="text-sm font-medium">View Templates</span>
             </button>
+            <WithPermission permission="analytics.view">
+              <button 
+                onClick={() => navigate('/analytics')}
+                className="flex flex-col items-center gap-2 p-4 border rounded-lg hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              >
+                <BarChart3 className="h-8 w-8 text-green-600" />
+                <span className="text-sm font-medium">View Analytics</span>
+              </button>
+            </WithPermission>
             <button 
               onClick={() => navigate('/settings')}
               className="flex flex-col items-center gap-2 p-4 border rounded-lg hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"

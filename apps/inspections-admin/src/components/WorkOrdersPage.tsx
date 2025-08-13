@@ -7,7 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useWorkOrders } from '@/hooks/useApi';
 import { formatDate, formatDateTime } from '@/lib/utils';
 import type { WorkOrder } from '@/lib/api';
+import { api } from '@/lib/api';
 import { WorkOrderModal } from '@/components/modals/WorkOrderModal';
+import { DeleteConfirmationDialog } from '@/components/modals/DeleteConfirmationDialog';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Search, 
   Plus, 
@@ -57,10 +60,12 @@ function getPriorityColor(priority: string) {
 
 function WorkOrderCard({ 
   workOrder, 
-  onEdit 
+  onEdit,
+  onDelete
 }: { 
   workOrder: WorkOrder;
   onEdit: (workOrder: WorkOrder) => void;
+  onDelete: (workOrder: WorkOrder) => void;
 }) {
   const completedInspections = workOrder.inspections.filter(i => i.status === 'completed').length;
   const totalInspections = workOrder.inspections.length;
@@ -158,6 +163,15 @@ function WorkOrderCard({
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDelete(workOrder)}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
             </div>
           </div>
         </div>
@@ -168,16 +182,39 @@ function WorkOrderCard({
 
 export function WorkOrdersPage() {
   const { data: workOrders, loading, error, refetch } = useWorkOrders();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [workOrderToDelete, setWorkOrderToDelete] = useState<WorkOrder | null>(null);
 
   const filteredWorkOrders = workOrders?.filter(wo =>
     wo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     wo.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     wo.assignedTo.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
+
+  const handleDeleteWorkOrder = async () => {
+    if (!workOrderToDelete) return;
+    
+    try {
+      await api.workOrders.delete(workOrderToDelete.id);
+      toast({
+        title: "Work order deleted",
+        description: `"${workOrderToDelete.title}" has been deleted successfully.`,
+      });
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete work order. Please try again.",
+        variant: "destructive",
+      });
+      console.error('Failed to delete work order:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -362,6 +399,10 @@ export function WorkOrdersPage() {
                 setSelectedWorkOrder(wo);
                 setModalOpen(true);
               }}
+              onDelete={(wo) => {
+                setWorkOrderToDelete(wo);
+                setDeleteDialogOpen(true);
+              }}
             />
           ))}
         </div>
@@ -423,9 +464,29 @@ export function WorkOrdersPage() {
                       {workOrder.dueDate ? formatDate(workOrder.dueDate) : '-'}
                     </TableCell>
                     <TableCell>
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedWorkOrder(workOrder);
+                            setModalOpen(true);
+                          }}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setWorkOrderToDelete(workOrder);
+                            setDeleteDialogOpen(true);
+                          }}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
@@ -452,6 +513,15 @@ export function WorkOrdersPage() {
         onOpenChange={setModalOpen}
         workOrder={selectedWorkOrder}
         onSave={refetch}
+      />
+
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete Work Order"
+        description="Are you sure you want to delete this work order? This action cannot be undone and will remove all associated inspections."
+        itemName={workOrderToDelete?.title}
+        onConfirm={handleDeleteWorkOrder}
       />
     </div>
   );

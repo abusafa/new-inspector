@@ -14,24 +14,24 @@ export declare class InspectionsController {
         resultJson: import("@prisma/client/runtime/library").JsonValue;
         template: {
             id: string;
-            name: string;
-            createdAt: Date;
-            updatedAt: Date;
             templateId: string;
+            name: string;
             description: string;
             schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            createdAt: Date;
+            updatedAt: Date;
         };
         workOrder: {
             id: string;
-            location: string | null;
+            workOrderId: string;
+            status: string;
+            description: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
-            workOrderId: string;
             title: string;
             dueDate: Date | null;
-            status: string;
             assignedTo: string;
+            location: string | null;
             priority: string;
         };
     }[]>;
@@ -47,6 +47,75 @@ export declare class InspectionsController {
         order: number;
         work_order_id: string;
     } | null>;
+    create(body: any): Promise<{
+        id: string;
+        inspectionId: string;
+        workOrderId: string;
+        templateId: string;
+        status: string;
+        required: boolean;
+        order: number;
+        completedAt: Date | null;
+        resultJson: import("@prisma/client/runtime/library").JsonValue;
+        template: {
+            id: string;
+            templateId: string;
+            name: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+        workOrder: {
+            id: string;
+            workOrderId: string;
+            status: string;
+            description: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string;
+            dueDate: Date | null;
+            assignedTo: string;
+            location: string | null;
+            priority: string;
+        };
+    }>;
+    update(id: string, body: any): Promise<{
+        id: string;
+        inspectionId: string;
+        workOrderId: string;
+        templateId: string;
+        status: string;
+        required: boolean;
+        order: number;
+        completedAt: Date | null;
+        resultJson: import("@prisma/client/runtime/library").JsonValue;
+        template: {
+            id: string;
+            templateId: string;
+            name: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+        workOrder: {
+            id: string;
+            workOrderId: string;
+            status: string;
+            description: string;
+            createdAt: Date;
+            updatedAt: Date;
+            title: string;
+            dueDate: Date | null;
+            assignedTo: string;
+            location: string | null;
+            priority: string;
+        };
+    }>;
+    delete(id: string): Promise<{
+        success: boolean;
+    }>;
     complete(id: string, body: any): Promise<{
         inspection_id: string;
         status: string;

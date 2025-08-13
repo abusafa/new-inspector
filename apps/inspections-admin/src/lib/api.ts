@@ -146,6 +146,17 @@ export const api = {
   inspections: {
     list: () => fetchApi<Inspection[]>('/inspections'),
     get: (id: string) => fetchApi<Inspection>(`/inspections/${id}`),
+    create: (data: Partial<Inspection>) => fetchApi<Inspection>('/inspections', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+    update: (id: string, data: Partial<Inspection>) => fetchApi<Inspection>(`/inspections/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+    delete: (id: string) => fetchApi<void>(`/inspections/${id}`, {
+      method: 'DELETE',
+    }),
     complete: (id: string, resultJson: any) => fetchApi<Inspection>(`/inspections/${id}/complete`, {
       method: 'POST',
       body: JSON.stringify({ resultJson }),
