@@ -4,11 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useWorkOrders } from '@/hooks/useApi';
 import { formatDate, formatDateTime } from '@/lib/utils';
 import type { WorkOrder } from '@/lib/api';
 import { api } from '@/lib/api';
 import { WorkOrderModal } from '@/components/modals/WorkOrderModal';
+import { WorkOrderTemplateModal } from '@/components/modals/WorkOrderTemplateModal';
+import { BulkAssignmentModal } from '@/components/modals/BulkAssignmentModal';
+import { WorkOrderWorkflowModal } from '@/components/modals/WorkOrderWorkflowModal';
 import { DeleteConfirmationDialog } from '@/components/modals/DeleteConfirmationDialog';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -25,7 +29,12 @@ import {
   Clock,
   CheckCircle2,
   AlertTriangle,
-  RefreshCw
+  RefreshCw,
+  File,
+  Users,
+  GitBranch,
+  Zap,
+  CheckSquare
 } from 'lucide-react';
 
 function getStatusColor(status: string) {
@@ -61,11 +70,13 @@ function getPriorityColor(priority: string) {
 function WorkOrderCard({ 
   workOrder, 
   onEdit,
-  onDelete
+  onDelete,
+  onWorkflow
 }: { 
   workOrder: WorkOrder;
   onEdit: (workOrder: WorkOrder) => void;
   onDelete: (workOrder: WorkOrder) => void;
+  onWorkflow: (workOrder: WorkOrder) => void;
 }) {
   const completedInspections = workOrder.inspections.filter(i => i.status === 'completed').length;
   const totalInspections = workOrder.inspections.length;
@@ -158,6 +169,14 @@ function WorkOrderCard({
               <Button 
                 variant="outline" 
                 size="sm"
+                onClick={() => onWorkflow(workOrder)}
+              >
+                <GitBranch className="h-4 w-4 mr-1" />
+                Workflow
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
                 onClick={() => onEdit(workOrder)}
               >
                 <Edit className="h-4 w-4 mr-1" />
@@ -189,6 +208,12 @@ export function WorkOrdersPage() {
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [workOrderToDelete, setWorkOrderToDelete] = useState<WorkOrder | null>(null);
+  const [templateModalOpen, setTemplateModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+  const [bulkAssignmentOpen, setBulkAssignmentOpen] = useState(false);
+  const [selectedWorkOrders, setSelectedWorkOrders] = useState<WorkOrder[]>([]);
+  const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
+  const [workflowWorkOrder, setWorkflowWorkOrder] = useState<WorkOrder | null>(null);
 
   const filteredWorkOrders = workOrders?.filter(wo =>
     wo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -214,6 +239,50 @@ export function WorkOrdersPage() {
       });
       console.error('Failed to delete work order:', error);
     }
+  };
+
+  const handleTemplateCreate = async (template: any) => {
+    // Mock template creation - in real app, this would call API
+    toast({
+      title: "Template created",
+      description: `Work order template "${template.name}" has been created.`,
+    });
+    setTemplateModalOpen(false);
+    setSelectedTemplate(null);
+  };
+
+  const handleBulkAssignment = async (assignments: any[]) => {
+    // Mock bulk assignment - in real app, this would call API
+    toast({
+      title: "Bulk assignment completed",
+      description: `${assignments.length} work orders have been assigned.`,
+    });
+    setBulkAssignmentOpen(false);
+    setSelectedWorkOrders([]);
+    refetch();
+  };
+
+  const handleWorkflowAction = async (workOrderId: string, action: any) => {
+    // Mock workflow action - in real app, this would call API
+    toast({
+      title: "Workflow action applied",
+      description: `${action.type} action has been applied to the work order.`,
+    });
+    setWorkflowModalOpen(false);
+    setWorkflowWorkOrder(null);
+    refetch();
+  };
+
+  const openBulkAssignment = () => {
+    if (filteredWorkOrders && filteredWorkOrders.length > 0) {
+      setSelectedWorkOrders(filteredWorkOrders.slice(0, 5)); // Select first 5 for demo
+      setBulkAssignmentOpen(true);
+    }
+  };
+
+  const openWorkflow = (workOrder: WorkOrder) => {
+    setWorkflowWorkOrder(workOrder);
+    setWorkflowModalOpen(true);
   };
 
   if (loading) {
@@ -279,6 +348,49 @@ export function WorkOrdersPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <File className="h-4 w-4 mr-2" />
+                Templates
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTemplateModalOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Template
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Eye className="h-4 w-4 mr-2" />
+                View Templates
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Zap className="h-4 w-4 mr-2" />
+                Actions
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={openBulkAssignment}>
+                <Users className="h-4 w-4 mr-2" />
+                Bulk Assignment
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CheckSquare className="h-4 w-4 mr-2" />
+                Bulk Status Update
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Calendar className="h-4 w-4 mr-2" />
+                Schedule Maintenance
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
           <Button onClick={() => {
             setSelectedWorkOrder(null);
             setModalOpen(true);
@@ -403,6 +515,7 @@ export function WorkOrdersPage() {
                 setWorkOrderToDelete(wo);
                 setDeleteDialogOpen(true);
               }}
+              onWorkflow={openWorkflow}
             />
           ))}
         </div>
@@ -514,6 +627,38 @@ export function WorkOrdersPage() {
         workOrder={selectedWorkOrder}
         onSave={refetch}
       />
+
+      <WorkOrderTemplateModal
+        isOpen={templateModalOpen}
+        onClose={() => {
+          setTemplateModalOpen(false);
+          setSelectedTemplate(null);
+        }}
+        template={selectedTemplate}
+        onSave={handleTemplateCreate}
+      />
+
+      <BulkAssignmentModal
+        isOpen={bulkAssignmentOpen}
+        onClose={() => {
+          setBulkAssignmentOpen(false);
+          setSelectedWorkOrders([]);
+        }}
+        workOrders={selectedWorkOrders}
+        onAssign={handleBulkAssignment}
+      />
+
+      {workflowWorkOrder && (
+        <WorkOrderWorkflowModal
+          isOpen={workflowModalOpen}
+          onClose={() => {
+            setWorkflowModalOpen(false);
+            setWorkflowWorkOrder(null);
+          }}
+          workOrder={workflowWorkOrder}
+          onUpdateWorkflow={handleWorkflowAction}
+        />
+      )}
 
       <DeleteConfirmationDialog
         open={deleteDialogOpen}

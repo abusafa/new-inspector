@@ -14,24 +14,24 @@ export declare class InspectionsController {
         resultJson: import("@prisma/client/runtime/library").JsonValue;
         template: {
             id: string;
-            templateId: string;
             name: string;
-            description: string;
-            schemaJson: import("@prisma/client/runtime/library").JsonValue;
             createdAt: Date;
             updatedAt: Date;
+            templateId: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
         };
         workOrder: {
             id: string;
-            workOrderId: string;
-            status: string;
-            description: string;
+            location: string | null;
             createdAt: Date;
             updatedAt: Date;
+            description: string;
+            workOrderId: string;
             title: string;
             dueDate: Date | null;
+            status: string;
             assignedTo: string;
-            location: string | null;
             priority: string;
         };
     }[]>;
@@ -59,24 +59,24 @@ export declare class InspectionsController {
         resultJson: import("@prisma/client/runtime/library").JsonValue;
         template: {
             id: string;
-            templateId: string;
             name: string;
-            description: string;
-            schemaJson: import("@prisma/client/runtime/library").JsonValue;
             createdAt: Date;
             updatedAt: Date;
+            templateId: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
         };
         workOrder: {
             id: string;
-            workOrderId: string;
-            status: string;
-            description: string;
+            location: string | null;
             createdAt: Date;
             updatedAt: Date;
+            description: string;
+            workOrderId: string;
             title: string;
             dueDate: Date | null;
+            status: string;
             assignedTo: string;
-            location: string | null;
             priority: string;
         };
     }>;
@@ -92,24 +92,24 @@ export declare class InspectionsController {
         resultJson: import("@prisma/client/runtime/library").JsonValue;
         template: {
             id: string;
-            templateId: string;
             name: string;
-            description: string;
-            schemaJson: import("@prisma/client/runtime/library").JsonValue;
             createdAt: Date;
             updatedAt: Date;
+            templateId: string;
+            description: string;
+            schemaJson: import("@prisma/client/runtime/library").JsonValue;
         };
         workOrder: {
             id: string;
-            workOrderId: string;
-            status: string;
-            description: string;
+            location: string | null;
             createdAt: Date;
             updatedAt: Date;
+            description: string;
+            workOrderId: string;
             title: string;
             dueDate: Date | null;
+            status: string;
             assignedTo: string;
-            location: string | null;
             priority: string;
         };
     }>;

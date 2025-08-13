@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 
 interface UserProfileProps {
-  variant?: 'dropdown' | 'card';
+  variant?: 'dropdown' | 'card' | 'avatar';
   showFullProfile?: boolean;
 }
 
@@ -243,4 +243,46 @@ export function UserProfile({ variant = 'dropdown', showFullProfile = false }: U
       )}
     </Card>
   );
+
+  // Avatar variant for mobile header
+  if (variant === 'avatar') {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-full">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-medium">
+              {getInitials(user?.name || '')}
+            </div>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuLabel>
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white font-medium">
+                {getInitials(user?.name || '')}
+              </div>
+              <div>
+                <div className="font-medium">{user?.name}</div>
+                <div className="text-xs text-muted-foreground">{user?.role}</div>
+              </div>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <User className="h-4 w-4 mr-2" />
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Settings className="h-4 w-4 mr-2" />
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={logout} className="text-red-600">
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
 }

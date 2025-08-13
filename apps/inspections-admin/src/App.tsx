@@ -1,8 +1,14 @@
 import { NavLink, Outlet, type RouteObject, useRoutes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { RealTimeProvider } from './contexts/RealTimeContext';
 import { ProtectedRoute, WithPermission } from './components/auth/ProtectedRoute';
 import { UserProfile } from './components/auth/UserProfile';
+import { NotificationsPanel } from './components/NotificationsPanel';
+import { RealTimeStatus } from './components/RealTimeStatus';
 import { Dashboard } from './components/Dashboard';
+import { MobileDashboard } from './components/MobileDashboard';
+import { MobileLayout } from './components/MobileLayout';
+import { ResponsiveDashboard } from './components/ResponsiveDashboard';
 import { WorkOrdersPage } from './components/WorkOrdersPage';
 import { InspectionsPage } from './components/InspectionsPage';
 import { UsersPage } from './components/UsersPage';
@@ -130,13 +136,8 @@ function Layout() {
             </nav>
             
             <div className="flex items-center gap-3 ml-4 border-l pl-4">
-              <WithPermission permission="system.audit">
-                <button className="relative p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted">
-                  <Bell className="h-4 w-4" />
-                  <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-                </button>
-              </WithPermission>
-              
+              <RealTimeStatus />
+              <NotificationsPanel />
               <UserProfile variant="dropdown" />
             </div>
           </div>
@@ -152,11 +153,11 @@ function Layout() {
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Layout />,
+    element: <MobileLayout />,
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <ResponsiveDashboard />,
       },
       {
         path: 'work-orders',
@@ -210,8 +211,10 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
-      <Toaster />
+      <RealTimeProvider>
+        <AppRoutes />
+        <Toaster />
+      </RealTimeProvider>
     </AuthProvider>
   );
 }

@@ -16,6 +16,8 @@ import { WorkOrderModal } from '@/components/modals/WorkOrderModal';
 import { UserModal } from '@/components/modals/UserModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { WithPermission } from '@/components/auth/ProtectedRoute';
+import { ActivityFeed } from '@/components/ActivityFeed';
+import { RealTimeStatusBadge } from '@/components/RealTimeStatus';
 import { 
   FileCheck, 
   Users, 
@@ -99,9 +101,12 @@ export function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">
-            Welcome back, {user?.name?.split(' ')[0] || 'User'}!
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold">
+              Welcome back, {user?.name?.split(' ')[0] || 'User'}!
+            </h1>
+            <RealTimeStatusBadge />
+          </div>
           <p className="text-muted-foreground">
             {user?.role} Dashboard - Overview of inspections and work orders
           </p>
@@ -325,6 +330,16 @@ export function Dashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Real-time Activity Feed */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <ActivityFeed />
+        </div>
+        <div>
+          <ActivityFeed compact />
+        </div>
+      </div>
 
       <WorkOrderModal
         open={workOrderModalOpen}
