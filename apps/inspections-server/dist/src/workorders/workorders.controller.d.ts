@@ -42,29 +42,24 @@ export declare class WorkOrdersController {
         }[];
     } | null>;
     create(body: any): Promise<{
-        id: string;
-        workOrderId: string;
-        title: string;
-        description: string;
-        createdAt: Date;
-        updatedAt: Date;
-        dueDate: Date | undefined;
-        status: string;
-        assignedTo: string;
-        location: string | undefined;
-        priority: string;
-        inspections: {
-            id: any;
-            inspectionId: any;
-            workOrderId: any;
-            templateId: any;
-            status: any;
-            required: any;
-            order: any;
-            completedAt: any;
-            resultJson: any;
-            template: any;
-        }[];
+        id: any;
+        workOrderId: any;
+        title: any;
+        description: any;
+        createdAt: any;
+        updatedAt: any;
+        dueDate: any;
+        status: any;
+        assignedTo: any;
+        location: any;
+        priority: any;
+        estimatedDuration: any;
+        requiredSkills: any;
+        dependencies: any;
+        createdBy: any;
+        workOrderTemplate: any;
+        assets: any;
+        inspections: any;
     }>;
     update(id: string, body: any): Promise<{
         id: string;
@@ -94,4 +89,5 @@ export declare class WorkOrdersController {
     delete(id: string): Promise<{
         success: boolean;
     }>;
+    private formatWorkOrderResponse;
 }

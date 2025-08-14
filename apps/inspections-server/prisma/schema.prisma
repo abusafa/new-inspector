@@ -38,7 +38,21 @@ model WorkOrder {
   // Optional physical or logical location for the work order
   location    String?
   priority    String       @default("medium")
+  
+  // Enhanced fields
+  estimatedDuration Int?     // Estimated completion time in hours
+  requiredSkills    String[] @default([])
+  workOrderTemplateId String? // Reference to work order template
+  createdBy         String?  // User ID who created the work order
+  dependencies      String[] @default([]) // Other work order IDs this depends on
+  
   inspections Inspection[]
+  assets      WorkOrderAsset[]
+  workOrderTemplate WorkOrderTemplate? @relation(fields: [workOrderTemplateId], references: [id])
+  
+  @@index([status])
+  @@index([assignedTo])
+  @@index([createdBy])
 }
 
 model InspectionTemplate {
@@ -75,6 +89,117 @@ model InspectionTemplate {
   @@index([status])
   @@index([createdBy])
   @@index([parentId])
+}
+
+model Asset {
+  id            String   @id @default(uuid())
+  assetId       String   @unique // External asset identifier
+  name          String
+  type          String   // Equipment type (forklift, crane, etc.)
+  category      String   @default("Equipment")
+  location      String?
+  manufacturer  String?
+  model         String?
+  serialNumber  String?
+  status        String   @default("active") // active, inactive, maintenance, retired
+  lastInspected DateTime?
+  nextInspectionDue DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?  // User ID who created the asset
+  
+  // Additional metadata
+  purchaseDate  DateTime?
+  warrantyExpiry DateTime?
+  specifications Json?    // Store technical specifications
+  notes         String?
+  
+  workOrders    WorkOrderAsset[]
+  
+  @@index([type])
+  @@index([category])
+  @@index([status])
+  @@index([location])
+}
+
+model WorkOrderAsset {
+  id          String @id @default(uuid())
+  workOrderId String
+  assetId     String
+  notes       String? // Specific notes about this asset in this work order
+  priority    String @default("medium") // Priority for this specific asset
+  
+  workOrder   WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  asset       Asset     @relation(fields: [assetId], references: [id])
+  
+  @@unique([workOrderId, assetId])
+  @@index([workOrderId])
+  @@index([assetId])
+}
+
+model WorkOrderTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  category    String
+  priority    String   @default("medium")
+  estimatedDuration Int // Estimated completion time in hours
+  defaultAssignee   String?
+  requiredSkills    String[] @default([])
+  inspectionTemplateIds String[] @default([]) // Template IDs to include
+  checklist     Json     // Checklist items as JSON
+  notifications Json     // Notification settings as JSON
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?  // User ID who created the template
+  
+  workOrders    WorkOrder[]
+  recurringSchedules RecurringSchedule[]
+  
+  @@index([category])
+  @@index([isActive])
+  @@index([createdBy])
+}
+
+model RecurringSchedule {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  workOrderTemplateId String
+  assignedTo  String?
+  assignedGroup String?
+  location    String?
+  priority    String   @default("medium")
+  
+  // Scheduling configuration
+  frequency   String   // daily, weekly, monthly, quarterly, yearly
+  interval    Int      @default(1) // Every N days/weeks/months
+  startDate   DateTime
+  endDate     DateTime?
+  daysOfWeek  Int[]    @default([]) // For weekly schedules (0=Sunday, 6=Saturday)
+  dayOfMonth  Int?     // For monthly schedules (1-31)
+  time        String?  // HH:MM format
+  timezone    String   @default("UTC")
+  
+  // Status and metadata
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?  // User ID who created the schedule
+  lastGenerated DateTime?
+  nextDue     DateTime?
+  
+  // Statistics
+  totalGenerated Int @default(0)
+  completedCount Int @default(0)
+  overdueCount   Int @default(0)
+  
+  workOrderTemplate WorkOrderTemplate @relation(fields: [workOrderTemplateId], references: [id])
+  
+  @@index([isActive])
+  @@index([nextDue])
+  @@index([createdBy])
 }
 
 model Inspection {

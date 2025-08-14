@@ -72,12 +72,14 @@ function WorkOrderCard({
   workOrder, 
   onEdit,
   onDelete,
-  onWorkflow
+  onWorkflow,
+  onView
 }: { 
   workOrder: WorkOrder;
   onEdit: (workOrder: WorkOrder) => void;
   onDelete: (workOrder: WorkOrder) => void;
   onWorkflow: (workOrder: WorkOrder) => void;
+  onView: (workOrder: WorkOrder) => void;
 }) {
   const completedInspections = workOrder.inspections.filter(i => i.status === 'completed').length;
   const totalInspections = workOrder.inspections.length;
@@ -163,7 +165,11 @@ function WorkOrderCard({
               )}
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onView(workOrder)}
+              >
                 <Eye className="h-4 w-4 mr-1" />
                 View
               </Button>
@@ -208,6 +214,8 @@ export function WorkOrdersPage() {
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [viewWorkOrder, setViewWorkOrder] = useState<WorkOrder | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [workOrderToDelete, setWorkOrderToDelete] = useState<WorkOrder | null>(null);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
@@ -285,6 +293,11 @@ export function WorkOrdersPage() {
   const openWorkflow = (workOrder: WorkOrder) => {
     setWorkflowWorkOrder(workOrder);
     setWorkflowModalOpen(true);
+  };
+
+  const handleViewWorkOrder = (workOrder: WorkOrder) => {
+    setViewWorkOrder(workOrder);
+    setViewModalOpen(true);
   };
 
   if (loading) {
@@ -518,6 +531,7 @@ export function WorkOrdersPage() {
                 setDeleteDialogOpen(true);
               }}
               onWorkflow={openWorkflow}
+              onView={handleViewWorkOrder}
             />
           ))}
         </div>
@@ -628,6 +642,15 @@ export function WorkOrdersPage() {
         onOpenChange={setModalOpen}
         workOrder={selectedWorkOrder}
         onSave={refetch}
+      />
+
+      {/* View Work Order Modal */}
+      <WorkOrderModal
+        open={viewModalOpen}
+        onOpenChange={setViewModalOpen}
+        workOrder={viewWorkOrder}
+        onSave={() => {}} // No save needed for view-only
+        readOnly={true}
       />
 
       <WorkOrderTemplateModal

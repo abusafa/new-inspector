@@ -1018,6 +1018,22 @@ function RoleFormDialog({
     return { assigned: assignedCount, total: categoryPermissions.length };
   };
 
+  const getPermissionsByCategory = (category: string) => {
+    return AVAILABLE_PERMISSIONS.filter(p => p.category === category);
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'system': return <Crown className="h-4 w-4" />;
+      case 'users': return <Users className="h-4 w-4" />;
+      case 'workorders': return <FileCheck className="h-4 w-4" />;
+      case 'inspections': return <ClipboardList className="h-4 w-4" />;
+      case 'templates': return <Eye className="h-4 w-4" />;
+      case 'analytics': return <BarChart3 className="h-4 w-4" />;
+      default: return <Shield className="h-4 w-4" />;
+    }
+  };
+
   return (
     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
@@ -1121,7 +1137,7 @@ function RoleFormDialog({
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-2 md:grid-cols-2">
-                    {getPermissionsByCategory(category).map(permission => {
+                    {getPermissionsByCategory(category).map((permission: Permission) => {
                       const isAssigned = formData.permissions?.includes(permission.id) || false;
                       const isDisabled = isSystemRole && permission.isSystemCritical && isAssigned;
                       

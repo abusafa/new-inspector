@@ -12,6 +12,7 @@ import { ResponsiveDashboard } from './components/ResponsiveDashboard';
 import { WorkOrdersPage } from './components/WorkOrdersPage';
 import { InspectionsPage } from './components/InspectionsPage';
 import { UsersPage } from './components/UsersPage';
+import { AssetsPage } from './components/AssetsPage';
 import { SettingsPage } from './components/SettingsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
 import { TemplateManagementPage } from './components/TemplateManagementPage';
@@ -26,6 +27,7 @@ import {
   FileCheck, 
   ClipboardList, 
   Users, 
+  Package,
   Settings,
   BarChart3,
   Shield,
@@ -144,6 +146,23 @@ function Layout() {
                   Recurring
                 </NavLink>
               </WithPermission>
+              
+              {/* Temporarily show Assets for all users - remove WithPermission wrapper for testing */}
+              <div>
+                <NavLink 
+                  to="/assets" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <Package className="h-4 w-4" />
+                  Assets
+                </NavLink>
+              </div>
               
               <WithPermission permission="users.view">
                 <NavLink 
@@ -305,6 +324,10 @@ const routes: RouteObject[] = [
             <RecurringWorkOrders />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'assets',
+        element: <AssetsPage />,
       },
       {
         path: 'users',

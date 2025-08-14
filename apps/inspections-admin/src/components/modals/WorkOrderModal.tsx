@@ -13,9 +13,10 @@ interface WorkOrderModalProps {
   onOpenChange: (open: boolean) => void;
   workOrder?: WorkOrder | null;
   onSave: () => void;
+  readOnly?: boolean;
 }
 
-export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOrderModalProps) {
+export function WorkOrderModal({ open, onOpenChange, workOrder, onSave, readOnly = false }: WorkOrderModalProps) {
   const { data: users } = useUsers();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -96,7 +97,7 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {workOrder ? 'Edit Work Order' : 'Create Work Order'}
+            {readOnly ? 'View Work Order' : workOrder ? 'Edit Work Order' : 'Create Work Order'}
           </DialogTitle>
         </DialogHeader>
 
@@ -108,6 +109,7 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="Work order title"
               required
+              disabled={readOnly}
             />
           </div>
 
@@ -119,13 +121,14 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
               placeholder="Work order description"
               rows={3}
               required
+              disabled={readOnly}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Priority</label>
-              <Select value={formData.priority} onValueChange={(value: string) => handleChange('priority', value)}>
+              <Select value={formData.priority} onValueChange={(value: string) => handleChange('priority', value)} disabled={readOnly}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -140,7 +143,7 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Status</label>
-              <Select value={formData.status} onValueChange={(value: string) => handleChange('status', value)}>
+              <Select value={formData.status} onValueChange={(value: string) => handleChange('status', value)} disabled={readOnly}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -155,7 +158,7 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Assigned To</label>
-            <Select value={formData.assignedTo} onValueChange={(value: string) => handleChange('assignedTo', value)}>
+            <Select value={formData.assignedTo} onValueChange={(value: string) => handleChange('assignedTo', value)} disabled={readOnly}>
               <SelectTrigger>
                 <SelectValue placeholder="Select assignee" />
               </SelectTrigger>
@@ -175,6 +178,7 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
               value={formData.location}
               onChange={(e) => handleChange('location', e.target.value)}
               placeholder="Work location"
+              disabled={readOnly}
             />
           </div>
 
@@ -184,16 +188,19 @@ export function WorkOrderModal({ open, onOpenChange, workOrder, onSave }: WorkOr
               type="date"
               value={formData.dueDate}
               onChange={(e) => handleChange('dueDate', e.target.value)}
+              disabled={readOnly}
             />
           </div>
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              {readOnly ? 'Close' : 'Cancel'}
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Saving...' : workOrder ? 'Update' : 'Create'}
-            </Button>
+            {!readOnly && (
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Saving...' : workOrder ? 'Update' : 'Create'}
+              </Button>
+            )}
           </DialogFooter>
         </form>
       </DialogContent>

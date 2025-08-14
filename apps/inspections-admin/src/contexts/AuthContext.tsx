@@ -24,35 +24,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Permission mappings based on roles
 const ROLE_PERMISSIONS: Record<string, string[]> = {
   'Admin': [
-    'users.view', 'users.create', 'users.edit', 'users.delete', 'users.manage_roles',
-    'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.delete', 'workorders.assign',
+    'users.view', 'users.create', 'users.edit', 'users.delete', 'users.manage_roles', 'users.roles',
+    'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.delete', 'workorders.assign', 'workorders.manage',
+    'assets.view', 'assets.create', 'assets.edit', 'assets.delete', 'assets.manage',
     'inspections.view', 'inspections.create', 'inspections.edit', 'inspections.delete', 'inspections.approve',
     'templates.view', 'templates.create', 'templates.edit', 'templates.delete', 'templates.manage',
+    'workorder-templates.view', 'workorder-templates.create', 'workorder-templates.edit', 'workorder-templates.delete',
+    'recurring-schedules.view', 'recurring-schedules.create', 'recurring-schedules.edit', 'recurring-schedules.delete',
     'analytics.view', 'system.settings', 'system.export', 'system.audit'
   ],
   'Safety Manager': [
     'users.view', 'users.edit',
-    'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.assign',
+    'workorders.view', 'workorders.create', 'workorders.edit', 'workorders.assign', 'workorders.manage',
+    'assets.view', 'assets.create', 'assets.edit', 'assets.manage',
     'inspections.view', 'inspections.create', 'inspections.edit', 'inspections.approve',
     'templates.view', 'templates.create', 'templates.edit', 'templates.manage',
+    'workorder-templates.view', 'workorder-templates.create', 'workorder-templates.edit',
+    'recurring-schedules.view', 'recurring-schedules.create', 'recurring-schedules.edit',
     'analytics.view', 'system.export'
   ],
   'Safety Supervisor': [
     'users.view',
     'workorders.view', 'workorders.create', 'workorders.edit',
+    'assets.view', 'assets.create', 'assets.edit',
     'inspections.view', 'inspections.create', 'inspections.edit',
-    'templates.view', 'analytics.view'
+    'templates.view', 'workorder-templates.view', 'recurring-schedules.view',
+    'analytics.view'
   ],
   'Inspector': [
     'workorders.view',
+    'assets.view',
     'inspections.view', 'inspections.create', 'inspections.edit',
     'templates.view'
   ],
   'Maintenance Lead': [
     'users.view',
     'workorders.view', 'workorders.create', 'workorders.edit',
+    'assets.view', 'assets.create', 'assets.edit', 'assets.manage',
     'inspections.view',
-    'templates.view'
+    'templates.view', 'workorder-templates.view', 'recurring-schedules.view'
   ]
 };
 

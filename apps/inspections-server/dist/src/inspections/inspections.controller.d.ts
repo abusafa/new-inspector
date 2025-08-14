@@ -41,11 +41,16 @@ export declare class InspectionsController {
             updatedAt: Date;
             description: string;
             status: string;
+            createdBy: string | null;
+            estimatedDuration: number | null;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
             assignedTo: string;
             priority: string;
+            requiredSkills: string[];
+            dependencies: string[];
+            workOrderTemplateId: string | null;
         };
     }[]>;
     get(id: string): Promise<{
@@ -99,11 +104,16 @@ export declare class InspectionsController {
             updatedAt: Date;
             description: string;
             status: string;
+            createdBy: string | null;
+            estimatedDuration: number | null;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
             assignedTo: string;
             priority: string;
+            requiredSkills: string[];
+            dependencies: string[];
+            workOrderTemplateId: string | null;
         };
     }>;
     update(id: string, body: any): Promise<{
@@ -145,11 +155,16 @@ export declare class InspectionsController {
             updatedAt: Date;
             description: string;
             status: string;
+            createdBy: string | null;
+            estimatedDuration: number | null;
             workOrderId: string;
             title: string;
             dueDate: Date | null;
             assignedTo: string;
             priority: string;
+            requiredSkills: string[];
+            dependencies: string[];
+            workOrderTemplateId: string | null;
         };
     }>;
     delete(id: string): Promise<{

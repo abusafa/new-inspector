@@ -490,8 +490,12 @@ function loadAllTemplateJsons() {
 }
 async function main() {
     await prisma.inspection.deleteMany({});
-    await prisma.inspectionTemplate.deleteMany({});
+    await prisma.workOrderAsset.deleteMany({});
+    await prisma.recurringSchedule.deleteMany({});
     await prisma.workOrder.deleteMany({});
+    await prisma.asset.deleteMany({});
+    await prisma.workOrderTemplate.deleteMany({});
+    await prisma.inspectionTemplate.deleteMany({});
     await prisma.user.deleteMany({});
     const createdUsers = [];
     for (const userData of mockUsers) {
@@ -653,9 +657,164 @@ async function main() {
             },
         },
     });
+    const assets = await Promise.all([
+        prisma.asset.create({
+            data: {
+                assetId: 'AST-001',
+                name: 'Forklift #1',
+                type: 'Forklift',
+                category: 'Equipment',
+                location: 'Warehouse A - Loading Dock',
+                manufacturer: 'Toyota',
+                model: 'Model 8FGU25',
+                serialNumber: 'SN123456789',
+                status: 'active',
+                purchaseDate: new Date('2023-01-15'),
+                nextInspectionDue: new Date('2025-01-25'),
+                specifications: {
+                    capacity: '2500 kg',
+                    liftHeight: '3.5 m',
+                    fuelType: 'Electric',
+                    batteryVoltage: '48V'
+                },
+                notes: 'Primary forklift for warehouse operations',
+                createdBy: 'system'
+            }
+        }),
+        prisma.asset.create({
+            data: {
+                assetId: 'AST-002',
+                name: 'Crane #2',
+                type: 'Crane',
+                category: 'Heavy Equipment',
+                location: 'Loading Dock',
+                manufacturer: 'Liebherr',
+                model: 'LTM 1030-2.1',
+                serialNumber: 'SN987654321',
+                status: 'maintenance',
+                purchaseDate: new Date('2022-06-10'),
+                nextInspectionDue: new Date('2025-02-01'),
+                specifications: {
+                    capacity: '30 tons',
+                    maxHeight: '40 m',
+                    engineType: 'Diesel',
+                    enginePower: '231 kW'
+                },
+                notes: 'Under maintenance - hydraulic system repair',
+                createdBy: 'system'
+            }
+        }),
+        prisma.asset.create({
+            data: {
+                assetId: 'AST-003',
+                name: 'Conveyor Belt A1',
+                type: 'Conveyor',
+                category: 'Machinery',
+                location: 'Production Line A',
+                manufacturer: 'Siemens',
+                model: 'CB-2000',
+                serialNumber: 'SN555666777',
+                status: 'active',
+                purchaseDate: new Date('2023-03-20'),
+                nextInspectionDue: new Date('2025-01-30'),
+                specifications: {
+                    length: '50 m',
+                    width: '800 mm',
+                    speed: '1.2 m/s',
+                    capacity: '100 kg/m'
+                },
+                createdBy: 'system'
+            }
+        })
+    ]);
+    const workOrderTemplate = await prisma.workOrderTemplate.create({
+        data: {
+            name: 'Daily Equipment Safety Check',
+            description: 'Comprehensive daily safety inspection for all equipment',
+            category: 'Safety',
+            priority: 'high',
+            estimatedDuration: 2,
+            defaultAssignee: 'John Smith',
+            requiredSkills: ['Safety', 'Mechanical'],
+            inspectionTemplateIds: [createdTemplates[0].id, createdTemplates[1].id],
+            checklist: [
+                {
+                    id: '1',
+                    title: 'Visual inspection of equipment',
+                    description: 'Check for visible damage or wear',
+                    required: true,
+                    estimatedTime: 0.5
+                },
+                {
+                    id: '2',
+                    title: 'Test safety systems',
+                    description: 'Verify all safety systems are functioning',
+                    required: true,
+                    estimatedTime: 1
+                }
+            ],
+            notifications: [
+                {
+                    event: 'created',
+                    recipients: ['safety@company.com'],
+                    method: 'email'
+                }
+            ],
+            isActive: true,
+            createdBy: 'system'
+        }
+    });
+    const recurringSchedule = await prisma.recurringSchedule.create({
+        data: {
+            name: 'Weekly Equipment Safety Check',
+            description: 'Weekly safety inspection for all critical equipment',
+            workOrderTemplateId: workOrderTemplate.id,
+            assignedTo: 'John Smith',
+            location: 'All Locations',
+            priority: 'high',
+            frequency: 'weekly',
+            interval: 1,
+            startDate: new Date('2025-01-20'),
+            daysOfWeek: [1],
+            time: '09:00',
+            timezone: 'UTC',
+            isActive: true,
+            nextDue: new Date('2025-01-27T09:00:00Z'),
+            createdBy: 'system'
+        }
+    });
+    await Promise.all([
+        prisma.workOrderAsset.create({
+            data: {
+                workOrderId: wo1.id,
+                assetId: assets[0].id,
+                priority: 'high',
+                notes: 'Primary forklift - critical for operations'
+            }
+        }),
+        prisma.workOrderAsset.create({
+            data: {
+                workOrderId: wo1.id,
+                assetId: assets[2].id,
+                priority: 'medium',
+                notes: 'Conveyor belt inspection'
+            }
+        }),
+        prisma.workOrderAsset.create({
+            data: {
+                workOrderId: wo2.id,
+                assetId: assets[1].id,
+                priority: 'critical',
+                notes: 'Crane maintenance required'
+            }
+        })
+    ]);
     console.log('Seeded users:', createdUsers.map((u) => `${u.name} (${u.phoneNumber})`).join(', '));
     console.log('Seeded templates:', createdTemplates.map((t) => `${t.name} (${t.templateId})`).join(', '));
     console.log('Seeded work orders:', wo1.workOrderId, wo2.workOrderId, wo3.workOrderId);
+    console.log(`Created ${assets.length} assets`);
+    console.log(`Created 1 work order template`);
+    console.log(`Created 1 recurring schedule`);
 }
 main()
     .catch((e) => {

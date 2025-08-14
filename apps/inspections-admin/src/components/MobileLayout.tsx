@@ -14,13 +14,18 @@ import {
   FileCheck, 
   ClipboardList, 
   Users, 
+  Package,
   Settings,
   BarChart3,
   Shield,
   Menu,
   X,
   ChevronRight,
-  Home
+  Home,
+  Layers,
+  CheckCircle,
+  RotateCcw,
+  UserCog
 } from 'lucide-react';
 
 interface MobileNavItem {
@@ -53,10 +58,40 @@ const navigationItems: MobileNavItem[] = [
     permission: 'inspections.view'
   },
   {
+    to: '/templates',
+    label: 'Templates',
+    icon: Layers,
+    permission: 'templates.manage'
+  },
+  {
+    to: '/approvals',
+    label: 'Approvals',
+    icon: CheckCircle,
+    permission: 'inspections.approve'
+  },
+  {
+    to: '/recurring',
+    label: 'Recurring',
+    icon: RotateCcw,
+    permission: 'workorders.manage'
+  },
+  {
+    to: '/assets',
+    label: 'Assets',
+    icon: Package
+    // No permission required temporarily for testing
+  },
+  {
     to: '/users',
     label: 'Users',
     icon: Users,
     permission: 'users.view'
+  },
+  {
+    to: '/roles',
+    label: 'Roles',
+    icon: UserCog,
+    permission: 'users.roles'
   },
   {
     to: '/analytics',

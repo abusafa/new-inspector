@@ -772,6 +772,46 @@ Items listed as out of scope may be considered for future versions based on user
 
 ---
 
+#### Test Scenario 2.3: Work Order Dependencies
+**Objective**: Test work order dependency functionality
+
+**Test Steps**:
+1. Create work order "WO-1: Equipment Shutdown"
+2. Create work order "WO-2: Safety Inspection" 
+3. Set WO-2 as dependent on WO-1 completion
+4. Assign both work orders to same inspector
+5. Verify WO-2 shows "Waiting for Prerequisites" status
+6. Complete WO-1
+7. Verify WO-2 automatically becomes available
+8. Test notification sent when dependent work order becomes available
+
+**Expected Results**:
+- Dependencies are enforced correctly
+- Dependent work orders remain blocked until prerequisites complete
+- Automatic status updates occur
+- Notifications are sent when dependencies are resolved
+
+---
+
+#### Test Scenario 2.4: Deactivated User Assignment Handling
+**Objective**: Test system behavior when assigned user is deactivated
+
+**Test Steps**:
+1. Create work order and assign to active inspector
+2. Deactivate the assigned inspector's account
+3. Verify work order shows "Requires Assignment" status
+4. Verify manager receives notification of unassigned work order
+5. Reassign work order to different inspector
+6. Verify new assignment takes effect immediately
+
+**Expected Results**:
+- Work order is automatically unassigned when user is deactivated
+- System flags work order for reassignment
+- Manager notifications are sent
+- Reassignment process works correctly
+
+---
+
 ### UAT-003: Template Management
 
 #### Test Scenario 3.1: Template Creation with Complex Logic
@@ -802,6 +842,28 @@ Items listed as out of scope may be considered for future versions based on user
 - Conditional logic works correctly in preview
 - Template is available for work order assignment
 - Mobile app can load and render template
+
+---
+
+#### Test Scenario 3.2: Template Version Locking
+**Objective**: Test template versioning during concurrent inspection usage
+
+**Test Steps**:
+1. Create and publish template version 1.0
+2. Start inspection using template v1.0 on mobile app
+3. While inspection is in progress, update template to version 1.1
+4. Publish template v1.1 
+5. Verify in-progress inspection continues with v1.0
+6. Create new work order with same template
+7. Verify new work order uses template v1.1
+8. Complete both inspections
+9. Verify completed inspections reference correct template versions
+
+**Expected Results**:
+- In-progress inspections are locked to original template version
+- New work orders use latest published version
+- Version history is maintained accurately
+- No data corruption occurs during version transitions
 
 ---
 
@@ -857,6 +919,31 @@ Items listed as out of scope may be considered for future versions based on user
 - Sync completes automatically when online
 - No data is lost during offline operation
 - Admin receives complete inspection data
+
+---
+
+#### Test Scenario 4.3: Offline Conflict Resolution
+**Objective**: Test conflict resolution when offline work conflicts with admin changes
+
+**Test Steps**:
+1. Inspector starts inspection while online
+2. Inspector goes offline and continues working
+3. Admin cancels the same work order while inspector is offline
+4. Inspector completes inspection offline
+5. Inspector comes back online
+6. Verify inspector receives conflict notification
+7. Verify admin receives notification of completed work on cancelled order
+8. Test admin resolution options:
+   - Accept inspector's work (un-cancel order)
+   - Preserve work for audit but keep order cancelled
+9. Verify resolution is applied correctly
+
+**Expected Results**:
+- Conflict is detected and flagged for resolution
+- Both parties receive appropriate notifications
+- Admin has clear resolution options
+- No data is lost regardless of resolution choice
+- Audit trail captures all conflict details
 
 ---
 
@@ -1029,6 +1116,166 @@ Items listed as out of scope may be considered for future versions based on user
 
 ---
 
+### UAT-009: Role-Based Access Control (RBAC) Verification
+
+#### Test Scenario 9.1: Access Control Enforcement
+**Objective**: Verify users cannot access features outside their permissions
+
+**Test Steps**:
+1. Login as Field Inspector
+2. Attempt to access admin URL (/admin/users) directly
+3. Verify system denies access with "Forbidden" message
+4. Attempt to create work order via API call using inspector credentials
+5. Verify API returns 403 Forbidden error
+6. Try to access analytics page through navigation
+7. Confirm navigation item is not visible
+8. Test mobile app access to admin features
+
+**Expected Results**:
+- All unauthorized access attempts are blocked
+- Appropriate error messages are displayed
+- API endpoints enforce role-based restrictions
+- UI elements respect permission levels
+
+---
+
+#### Test Scenario 9.2: Cross-Role Permission Testing
+**Objective**: Verify each role has correct access levels
+
+**Test Steps**:
+1. Test System Administrator access:
+   - Can access all admin features
+   - Can manage all user accounts
+   - Can modify system settings
+2. Test Safety Manager access:
+   - Can manage work orders and templates
+   - Can only manage users in same department
+   - Cannot access system configuration
+3. Test Inspector Supervisor access:
+   - Can assign work orders
+   - Can review inspections
+   - Cannot create templates
+4. Test Quality Auditor access:
+   - Can approve/reject inspections
+   - Can create corrective actions
+   - Cannot manage users
+
+**Expected Results**:
+- Each role has appropriate access level
+- Restricted features are not accessible
+- Permission boundaries are enforced consistently
+
+---
+
+### UAT-010: Notification Delivery
+
+#### Test Scenario 10.1: Work Order Assignment Notifications
+**Objective**: Verify all notification types are delivered correctly
+
+**Test Steps**:
+1. Create new work order and assign to inspector
+2. Verify inspector receives:
+   - Push notification on mobile device
+   - Email notification
+   - In-app notification badge
+3. Check notification content includes:
+   - Work order title and priority
+   - Due date and location
+   - Direct link to work order
+4. Test notification timing (should arrive within 2 minutes)
+
+**Expected Results**:
+- All notification channels deliver messages
+- Content is accurate and complete
+- Timing meets performance requirements
+- Links and actions work correctly
+
+---
+
+#### Test Scenario 10.2: Inspection Status Notifications
+**Objective**: Test notifications for various inspection events
+
+**Test Steps**:
+1. Complete inspection and submit for review
+2. Verify supervisor receives review notification
+3. Reject inspection with corrective actions
+4. Verify inspector receives:
+   - Rejection notification
+   - Corrective action assignments
+   - Due date reminders
+5. Test overdue work order notifications
+6. Verify manager receives escalation alerts
+
+**Expected Results**:
+- Each event triggers appropriate notifications
+- Recipients receive relevant information
+- Escalation procedures work correctly
+- No duplicate or missed notifications
+
+---
+
+#### Test Scenario 10.3: Notification Preferences
+**Objective**: Test user notification preference settings
+
+**Test Steps**:
+1. Access user profile notification settings
+2. Disable email notifications, keep push enabled
+3. Create test work order assignment
+4. Verify only push notification is received
+5. Test "Do Not Disturb" hours setting
+6. Verify notifications respect quiet hours
+7. Test notification frequency settings
+
+**Expected Results**:
+- User preferences are respected
+- Notification filtering works correctly
+- Critical notifications override preferences
+- Settings persist across sessions
+
+---
+
+### UAT-011: Negative Testing & Security
+
+#### Test Scenario 11.1: Input Validation and Security
+**Objective**: Test system resilience against malicious input
+
+**Test Steps**:
+1. Attempt SQL injection in search fields
+2. Test XSS attacks in text inputs
+3. Submit forms with missing required fields
+4. Upload invalid file types as photos
+5. Test extremely large file uploads
+6. Attempt to access other users' data via URL manipulation
+7. Test API rate limiting with rapid requests
+
+**Expected Results**:
+- All malicious inputs are sanitized
+- Validation errors are displayed appropriately
+- File uploads are properly restricted
+- Data access is properly isolated
+- Rate limiting prevents abuse
+
+---
+
+#### Test Scenario 11.2: Session Management
+**Objective**: Test session security and timeout handling
+
+**Test Steps**:
+1. Login and remain idle beyond session timeout
+2. Verify automatic logout occurs
+3. Test concurrent sessions from different devices
+4. Attempt to use expired session tokens
+5. Test session fixation attacks
+6. Verify secure cookie settings
+
+**Expected Results**:
+- Sessions timeout as configured
+- Expired sessions are properly invalidated
+- Security vulnerabilities are prevented
+- Multiple sessions are handled correctly
+
+---
+
 ## Production Readiness Checklist
 
 ### Security Requirements
@@ -1040,6 +1287,9 @@ Items listed as out of scope may be considered for future versions based on user
 - [ ] Rate limiting is implemented for API endpoints
 - [ ] Security headers are configured
 - [ ] Regular security scans are performed
+- [ ] Dependency scanning (Snyk, Dependabot) is configured to check for vulnerable libraries
+- [ ] Penetration testing has been completed
+- [ ] Security incident response plan is documented
 
 ### Performance Requirements
 - [ ] Page load times are under 3 seconds
@@ -1068,6 +1318,9 @@ Items listed as out of scope may be considered for future versions based on user
 - [ ] Graceful degradation is implemented
 - [ ] Circuit breakers are implemented for external services
 - [ ] Database failover is configured
+- [ ] RTO (Recovery Time Objective) and RPO (Recovery Point Objective) are defined and tested
+- [ ] Chaos engineering tests have been performed
+- [ ] Service level agreements (SLAs) are defined
 
 ### Mobile App Requirements
 - [ ] Offline functionality works completely
@@ -1078,6 +1331,9 @@ Items listed as out of scope may be considered for future versions based on user
 - [ ] Camera and signature capture work reliably
 - [ ] Push notifications are configured
 - [ ] App store deployment is prepared
+- [ ] App store listings (description, screenshots, privacy policy) are prepared and approved
+- [ ] Mobile device compatibility testing is complete
+- [ ] App performance on low-end devices is acceptable
 
 ### Monitoring and Observability
 - [ ] Application metrics are collected
@@ -1112,6 +1368,9 @@ Items listed as out of scope may be considered for future versions based on user
 - [ ] SSL certificates are installed
 - [ ] Domain names are configured
 - [ ] Rollback procedures are documented
+- [ ] Feature flag system is in place for incremental rollouts
+- [ ] Blue-green deployment strategy is implemented
+- [ ] Infrastructure as Code (IaC) is documented and tested
 
 ### Testing Completion
 - [ ] All UAT scenarios pass
@@ -1129,6 +1388,9 @@ Items listed as out of scope may be considered for future versions based on user
 - [ ] User training is scheduled
 - [ ] Rollback plan is prepared
 - [ ] Post-launch monitoring plan is active
+- [ ] Hypercare period is defined (2 weeks post-launch with heightened monitoring)
+- [ ] On-call rotation is established for critical issues
+- [ ] User feedback collection mechanism is in place
 
 ---
 

@@ -107,6 +107,78 @@ export interface Inspection {
   workOrder?: WorkOrder;
 }
 
+export interface Asset {
+  id: string;
+  assetId: string;
+  name: string;
+  type: string;
+  category: string;
+  location?: string;
+  manufacturer?: string;
+  model?: string;
+  serialNumber?: string;
+  status: 'active' | 'inactive' | 'maintenance' | 'retired';
+  lastInspected?: string;
+  nextInspectionDue?: string;
+  createdAt: string;
+  updatedAt: string;
+  purchaseDate?: string;
+  warrantyExpiry?: string;
+  specifications?: any;
+  notes?: string;
+  workOrderCount?: number;
+  recentWorkOrders?: any[];
+}
+
+export interface WorkOrderTemplate {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  priority: string;
+  estimatedDuration: number;
+  defaultAssignee?: string;
+  requiredSkills: string[];
+  inspectionTemplateIds: string[];
+  checklist: any;
+  notifications: any;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  usageCount?: number;
+  activeSchedules?: number;
+}
+
+export interface RecurringSchedule {
+  id: string;
+  name: string;
+  description: string;
+  workOrderTemplateId: string;
+  assignedTo?: string;
+  assignedGroup?: string;
+  location?: string;
+  priority: string;
+  frequency: string;
+  interval: number;
+  startDate: string;
+  endDate?: string;
+  daysOfWeek: number[];
+  dayOfMonth?: number;
+  time?: string;
+  timezone: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  lastGenerated?: string;
+  nextDue?: string;
+  totalGenerated: number;
+  completedCount: number;
+  overdueCount: number;
+  workOrderTemplate?: WorkOrderTemplate;
+}
+
 export interface InspectionTemplate {
   id: string;
   templateId: string;
@@ -346,6 +418,81 @@ export const api = {
   // Dashboard
   dashboard: {
     stats: () => fetchApi<DashboardStats>('/dashboard/stats'),
+  },
+
+  // Assets
+  assets: {
+    list: (params?: any) => fetchApi<{ data: Asset[]; pagination: any }>('/assets', { 
+      method: 'GET',
+      ...(params && { body: new URLSearchParams(params).toString() })
+    }),
+    get: (id: string) => fetchApi<Asset>(`/assets/${id}`),
+    create: (data: Partial<Asset>) => fetchApi<Asset>('/assets', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id: string, data: Partial<Asset>) => fetchApi<Asset>(`/assets/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id: string) => fetchApi<void>(`/assets/${id}`, { method: 'DELETE' }),
+    categories: () => fetchApi<{ name: string; count: number }[]>('/assets/categories'),
+    types: () => fetchApi<{ name: string; count: number }[]>('/assets/types'),
+    locations: () => fetchApi<string[]>('/assets/locations'),
+    workOrders: (id: string, params?: any) => fetchApi<WorkOrder[]>(`/assets/${id}/work-orders`, {
+      method: 'GET',
+      ...(params && { body: new URLSearchParams(params).toString() })
+    }),
+    updateMaintenanceSchedule: (id: string, data: any) => fetchApi<Asset>(`/assets/${id}/maintenance-schedule`, { 
+      method: 'POST', 
+      body: JSON.stringify(data) 
+    }),
+  },
+  
+  // Work Order Templates
+  workOrderTemplates: {
+    list: (params?: any) => fetchApi<{ data: WorkOrderTemplate[]; pagination: any }>('/work-order-templates', { 
+      method: 'GET',
+      ...(params && { body: new URLSearchParams(params).toString() })
+    }),
+    get: (id: string) => fetchApi<WorkOrderTemplate>(`/work-order-templates/${id}`),
+    create: (data: Partial<WorkOrderTemplate>) => fetchApi<WorkOrderTemplate>('/work-order-templates', { 
+      method: 'POST', 
+      body: JSON.stringify(data) 
+    }),
+    update: (id: string, data: Partial<WorkOrderTemplate>) => fetchApi<WorkOrderTemplate>(`/work-order-templates/${id}`, { 
+      method: 'PUT', 
+      body: JSON.stringify(data) 
+    }),
+    delete: (id: string) => fetchApi<void>(`/work-order-templates/${id}`, { method: 'DELETE' }),
+    duplicate: (id: string, data: any) => fetchApi<WorkOrderTemplate>(`/work-order-templates/${id}/duplicate`, { 
+      method: 'POST', 
+      body: JSON.stringify(data) 
+    }),
+    createWorkOrder: (id: string, data: any) => fetchApi<WorkOrder>(`/work-order-templates/${id}/create-work-order`, { 
+      method: 'POST', 
+      body: JSON.stringify(data) 
+    }),
+    categories: () => fetchApi<{ name: string; count: number }[]>('/work-order-templates/categories'),
+  },
+  
+  // Recurring Schedules
+  recurringSchedules: {
+    list: (params?: any) => fetchApi<{ data: RecurringSchedule[]; pagination: any }>('/recurring-schedules', { 
+      method: 'GET',
+      ...(params && { body: new URLSearchParams(params).toString() })
+    }),
+    get: (id: string) => fetchApi<RecurringSchedule>(`/recurring-schedules/${id}`),
+    create: (data: Partial<RecurringSchedule>) => fetchApi<RecurringSchedule>('/recurring-schedules', { 
+      method: 'POST', 
+      body: JSON.stringify(data) 
+    }),
+    update: (id: string, data: Partial<RecurringSchedule>) => fetchApi<RecurringSchedule>(`/recurring-schedules/${id}`, { 
+      method: 'PUT', 
+      body: JSON.stringify(data) 
+    }),
+    delete: (id: string) => fetchApi<void>(`/recurring-schedules/${id}`, { method: 'DELETE' }),
+    generateWorkOrder: (id: string, data?: any) => fetchApi<WorkOrder>(`/recurring-schedules/${id}/generate-work-order`, { 
+      method: 'POST', 
+      body: JSON.stringify(data || {}) 
+    }),
+    toggleActive: (id: string) => fetchApi<RecurringSchedule>(`/recurring-schedules/${id}/toggle-active`, { method: 'POST' }),
+    getDueToday: () => fetchApi<RecurringSchedule[]>('/recurring-schedules/due-today'),
+    getOverdue: () => fetchApi<RecurringSchedule[]>('/recurring-schedules/overdue'),
   },
 };
 
