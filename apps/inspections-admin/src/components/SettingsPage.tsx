@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SystemHealthCard } from '@/components/settings/SystemHealthCard';
 import { SystemConfigCard } from '@/components/settings/SystemConfigCard';
 import { DataManagementCard } from '@/components/settings/DataManagementCard';
+import { AuditLogs } from '@/components/AuditLogs';
 import { UserProfile } from '@/components/auth/UserProfile';
 import { useAuth } from '@/contexts/AuthContext';
 import { 

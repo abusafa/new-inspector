@@ -91,8 +91,8 @@ export function InspectionModal({ open, onOpenChange, inspection, onSave }: Insp
   }, [inspection, open]);
 
   useEffect(() => {
-    if (formData.templateId && templates) {
-      const template = templates.find(t => t.id === formData.templateId);
+    if (formData.templateId && templates?.data) {
+      const template = templates.data.find(t => t.id === formData.templateId);
       setSelectedTemplate(template || null);
     } else {
       setSelectedTemplate(null);
@@ -256,7 +256,7 @@ export function InspectionModal({ open, onOpenChange, inspection, onSave }: Insp
             <SelectValue placeholder="Select an inspection template" />
           </SelectTrigger>
           <SelectContent>
-            {templates?.map((template) => (
+            {templates?.data?.map((template) => (
               <SelectItem key={template.id} value={template.id}>
                 <div className="flex items-center gap-2">
                   <span>{template.name}</span>

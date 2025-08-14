@@ -13,19 +13,52 @@ class ApiError extends Error {
 async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
 
-  if (!response.ok) {
-    throw new ApiError(response.status, `API Error: ${response.statusText}`);
+    if (!response.ok) {
+      let errorMessage = `API Error: ${response.statusText}`;
+      
+      // Try to get detailed error message from response body
+      try {
+        const errorData = await response.json();
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+      } catch {
+        // If parsing JSON fails, use default error message
+      }
+      
+      throw new ApiError(response.status, errorMessage);
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    } else {
+      // Handle non-JSON responses (e.g., for DELETE endpoints that return empty body)
+      return {} as T;
+    }
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    
+    // Handle network errors and other fetch failures
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new ApiError(0, 'Network error: Unable to connect to the server');
+    }
+    
+    throw new ApiError(500, 'An unexpected error occurred');
   }
-
-  return response.json();
 }
 
 // Types
@@ -192,6 +225,7 @@ export const api = {
       equipmentType?: string;
       createdBy?: string;
       isPublic?: boolean;
+      difficulty?: string;
       page?: number;
       limit?: number;
       sortBy?: string;

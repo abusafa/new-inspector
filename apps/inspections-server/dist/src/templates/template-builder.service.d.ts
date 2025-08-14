@@ -38,4 +38,6 @@ export declare class TemplateBuilderService {
     private getQualityAuditPattern;
     private getMaintenanceLogPattern;
     private customizePattern;
+    private validateOperation;
+    private getDefaultSchema;
 }

@@ -80,7 +80,7 @@ export function useAuthState() {
     const userData: User = {
       phoneNumber,
       name: getNameFromPhone(phoneNumber), // Mock function to get name
-      role: 'Inspector',
+      role: getRoleFromPhone(phoneNumber),
       loginTime: new Date().toISOString()
     };
     
@@ -109,9 +109,24 @@ function getNameFromPhone(phoneNumber: string): string {
     '(555) 987-6543': 'Sarah Johnson',
     '(555) 456-7890': 'Mike Rodriguez',
     '(555) 321-0987': 'Emily Davis',
+    '(555) 111-1111': 'Lisa Davis',
+    '(555) 222-2222': 'David Brown',
   };
   
   return phoneMap[phoneNumber] || 'Inspector';
+}
+
+function getRoleFromPhone(phoneNumber: string): string {
+  const phoneToRole: Record<string, string> = {
+    '(555) 123-4567': 'Inspector',
+    '(555) 987-6543': 'Safety Manager',
+    '(555) 456-7890': 'Inspector',
+    '(555) 321-0987': 'Technician',
+    '(555) 111-1111': 'Inspector',
+    '(555) 222-2222': 'Supervisor',
+  };
+  
+  return phoneToRole[phoneNumber] || 'Inspector';
 }
 
 export { AuthContext };

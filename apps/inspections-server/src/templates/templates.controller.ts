@@ -19,11 +19,13 @@ export class TemplatesController {
       equipmentType,
       createdBy,
       isPublic,
+      // not part of DTO originally but used by FE
+      difficulty,
       page = 1,
       limit = 20,
       sortBy = 'updatedAt',
       sortOrder = 'desc'
-    } = query;
+    }: any = query as any;
 
     const where: any = {};
 
@@ -34,6 +36,7 @@ export class TemplatesController {
     if (equipmentType) where.equipmentType = equipmentType;
     if (createdBy) where.createdBy = createdBy;
     if (isPublic !== undefined) where.isPublic = isPublic;
+    if (difficulty) where.difficulty = difficulty;
     
     // Search functionality
     if (search) {

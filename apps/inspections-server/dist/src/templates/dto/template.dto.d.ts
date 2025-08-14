@@ -45,6 +45,7 @@ export declare class TemplateQueryDto {
     equipmentType?: string;
     createdBy?: string;
     isPublic?: boolean;
+    difficulty?: string;
     page?: number;
     limit?: number;
     sortBy?: string;

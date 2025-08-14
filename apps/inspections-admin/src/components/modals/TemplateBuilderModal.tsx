@@ -246,59 +246,109 @@ export function TemplateBuilderModal({ open, onOpenChange, template, onSave }: T
   const handleAddComponent = async (componentType: string, parentId?: string) => {
     if (!templateSchema) return;
 
-    try {
-      const updatedSchema = await api.templateBuilder.addComponent(templateSchema.template_id, {
-        componentType,
-        parentId,
-        customConfig: {
-          label: `New ${componentType}`,
-        }
-      });
-      setTemplateSchema(updatedSchema);
-    } catch (error) {
-      toast({
-        title: "Failed to add component",
-        description: "Please try again.",
-        variant: "destructive",
-      });
+    // If editing an existing template (has DB id), call server; otherwise mutate locally
+    if (template?.id) {
+      try {
+        const updatedSchema = await api.templateBuilder.addComponent(template.id, {
+          componentType,
+          parentId,
+          customConfig: { label: `New ${componentType}` },
+        });
+        setTemplateSchema(updatedSchema);
+      } catch (error) {
+        toast({ title: 'Failed to add component', description: 'Please try again.', variant: 'destructive' });
+      }
+      return;
     }
+
+    // Local add for new templates not yet saved to DB
+    const newItem = {
+      item_id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: componentType === 'section' ? 'section' : componentType === 'multiple_choice' || componentType === 'rating' || componentType === 'dropdown' || componentType === 'checkbox' ? 'question' : componentType,
+      label: `New ${componentType}`,
+      items: componentType === 'section' ? [] : undefined,
+    } as any;
+    setTemplateSchema((prev: any) => {
+      const next = { ...prev, items: [...(prev.items || [])] };
+      if (parentId) {
+        const addToParent = (items: any[]): boolean => {
+          for (const it of items) {
+            if (it.item_id === parentId) {
+              it.items = it.items || [];
+              it.items.push(newItem);
+              return true;
+            }
+            if (it.items && addToParent(it.items)) return true;
+          }
+          return false;
+        };
+        addToParent(next.items);
+      } else {
+        next.items.push(newItem);
+      }
+      return next;
+    });
   };
 
   const handleUpdateItem = async (itemId: string, updates: any) => {
     if (!templateSchema) return;
 
-    try {
-      const updatedSchema = await api.templateBuilder.updateItem(
-        templateSchema.template_id,
-        itemId,
-        updates
-      );
-      setTemplateSchema(updatedSchema);
-    } catch (error) {
-      toast({
-        title: "Failed to update item",
-        description: "Please try again.",
-        variant: "destructive",
-      });
+    if (template?.id) {
+      try {
+        const updatedSchema = await api.templateBuilder.updateItem(template.id, itemId, updates);
+        setTemplateSchema(updatedSchema);
+      } catch (error) {
+        toast({ title: 'Failed to update item', description: 'Please try again.', variant: 'destructive' });
+      }
+      return;
     }
+
+    // Local update
+    const updateById = (items: any[]): boolean => {
+      for (const it of items) {
+        if (it.item_id === itemId) {
+          Object.assign(it, updates);
+          return true;
+        }
+        if (it.items && updateById(it.items)) return true;
+      }
+      return false;
+    };
+    setTemplateSchema((prev: any) => {
+      const next = { ...prev, header_items: [...(prev.header_items || [])], items: [...(prev.items || [])] };
+      // update header and items
+      updateById(next.header_items);
+      updateById(next.items);
+      return next;
+    });
   };
 
   const handleDeleteItem = async (itemId: string) => {
     if (!templateSchema) return;
 
-    try {
-      const updatedSchema = await api.templateBuilder.deleteItem(
-        templateSchema.template_id,
-        itemId
-      );
-      setTemplateSchema(updatedSchema);
-    } catch (error) {
-      toast({
-        title: "Failed to delete item",
-        description: "Please try again.",
-        variant: "destructive",
-      });
+    if (template?.id) {
+      try {
+        const updatedSchema = await api.templateBuilder.deleteItem(template.id, itemId);
+        setTemplateSchema(updatedSchema);
+      } catch (error) {
+        toast({ title: 'Failed to delete item', description: 'Please try again.', variant: 'destructive' });
+      }
+      return;
     }
+
+    // Local delete
+    const removeById = (items: any[]): any[] => {
+      return (items || []).filter((it: any) => {
+        if (it.item_id === itemId) return false;
+        if (it.items) it.items = removeById(it.items);
+        return true;
+      });
+    };
+    setTemplateSchema((prev: any) => ({
+      ...prev,
+      header_items: removeById(prev.header_items || []),
+      items: removeById(prev.items || []),
+    }));
   };
 
   const getComponentIcon = (iconName: string) => {

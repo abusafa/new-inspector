@@ -114,9 +114,27 @@ export interface WorkOrderInspection {
   template_id: string;
   template_name: string;
   template_description: string;
-  status: 'not-started' | 'in-progress' | 'completed';
+  status: 'not-started' | 'in-progress' | 'completed' | 'pending-review' | 'approved' | 'rejected';
   required: boolean;
   completed_at?: string;
+  reviewed_at?: string;
+  reviewed_by?: string;
   result?: InspectionResult;
   order: number;
+  approval_notes?: string;
+  corrective_actions?: CorrectiveAction[];
+}
+
+export interface CorrectiveAction {
+  id: string;
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  assigned_to?: string;
+  due_date?: string;
+  status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
+  created_by: string;
+  created_at: string;
+  completed_at?: string;
+  work_order_id?: string; // Link to generated work order
 }

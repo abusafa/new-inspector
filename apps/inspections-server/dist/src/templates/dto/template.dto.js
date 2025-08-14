@@ -221,6 +221,7 @@ class TemplateQueryDto {
     equipmentType;
     createdBy;
     isPublic;
+    difficulty;
     page = 1;
     limit = 20;
     sortBy = 'updatedAt';
@@ -268,6 +269,11 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], TemplateQueryDto.prototype, "isPublic", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(['easy', 'medium', 'hard']),
+    __metadata("design:type", String)
+], TemplateQueryDto.prototype, "difficulty", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),

@@ -15,6 +15,11 @@ import { UsersPage } from './components/UsersPage';
 import { SettingsPage } from './components/SettingsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
 import { TemplateManagementPage } from './components/TemplateManagementPage';
+import { ApprovalDashboard } from './components/ApprovalDashboard';
+import { RecurringWorkOrders } from './components/RecurringWorkOrders';
+import { RoleManagement } from './components/RoleManagement';
+import { AuditLogs } from './components/AuditLogs';
+import { NotificationCenter } from './components/NotificationCenter';
 import { Toaster } from './components/ui/toaster';
 import { 
   LayoutDashboard, 
@@ -25,7 +30,11 @@ import {
   BarChart3,
   Shield,
   Bell,
-  Layers
+  Layers,
+  CheckCircle,
+  RotateCcw,
+  UserCog,
+  Activity
 } from 'lucide-react';
 
 function Layout() {
@@ -104,6 +113,38 @@ function Layout() {
                 </NavLink>
               </WithPermission>
               
+              <WithPermission permission="inspections.approve">
+                <NavLink 
+                  to="/approvals" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <CheckCircle className="h-4 w-4" />
+                  Approvals
+                </NavLink>
+              </WithPermission>
+              
+              <WithPermission permission="workorders.manage">
+                <NavLink 
+                  to="/recurring" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Recurring
+                </NavLink>
+              </WithPermission>
+              
               <WithPermission permission="users.view">
                 <NavLink 
                   to="/users" 
@@ -117,6 +158,22 @@ function Layout() {
                 >
                   <Users className="h-4 w-4" />
                   Users
+                </NavLink>
+              </WithPermission>
+              
+              <WithPermission permission="users.roles">
+                <NavLink 
+                  to="/roles" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <UserCog className="h-4 w-4" />
+                  Roles
                 </NavLink>
               </WithPermission>
               
@@ -136,6 +193,38 @@ function Layout() {
                 </NavLink>
               </WithPermission>
               
+              <WithPermission permission="system.audit">
+                <NavLink 
+                  to="/audit" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <Activity className="h-4 w-4" />
+                  Audit Logs
+                </NavLink>
+              </WithPermission>
+
+              <WithPermission permission="system.settings">
+                <NavLink 
+                  to="/notifications" 
+                  className={({ isActive }) => 
+                    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
+                      isActive 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    }`
+                  }
+                >
+                  <Bell className="h-4 w-4" />
+                  Notifications
+                </NavLink>
+              </WithPermission>
+
               <WithPermission permission="system.settings">
                 <NavLink 
                   to="/settings" 
@@ -202,6 +291,22 @@ const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'approvals',
+        element: (
+          <ProtectedRoute requiredPermission="inspections.approve">
+            <ApprovalDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'recurring',
+        element: (
+          <ProtectedRoute requiredPermission="workorders.manage">
+            <RecurringWorkOrders />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: 'users',
         element: (
           <ProtectedRoute requiredPermission="users.view">
@@ -210,10 +315,34 @@ const routes: RouteObject[] = [
         ),
       },
       {
+        path: 'roles',
+        element: (
+          <ProtectedRoute requiredPermission="users.roles">
+            <RoleManagement />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: 'analytics',
         element: (
           <ProtectedRoute requiredPermission="analytics.view">
             <AnalyticsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'audit',
+        element: (
+          <ProtectedRoute requiredPermission="system.audit">
+            <AuditLogs />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'notifications',
+        element: (
+          <ProtectedRoute requiredPermission="system.settings">
+            <NotificationCenter />
           </ProtectedRoute>
         ),
       },

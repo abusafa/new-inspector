@@ -187,7 +187,7 @@ export function InspectionsPage() {
     inspection.status.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  const filteredTemplates = templates?.filter(template =>
+  const filteredTemplates = templates?.data?.filter(template =>
     template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     template.description.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
@@ -317,9 +317,9 @@ export function InspectionsPage() {
           className="relative"
         >
           Templates
-          {templates && (
+          {templates?.data && (
             <Badge variant="secondary" className="ml-2 text-xs">
-              {templates.length}
+              {templates.data.length}
             </Badge>
           )}
         </Button>

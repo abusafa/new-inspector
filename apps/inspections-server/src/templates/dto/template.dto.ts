@@ -169,6 +169,10 @@ export class TemplateQueryDto {
   isPublic?: boolean;
 
   @IsOptional()
+  @IsIn(['easy', 'medium', 'hard'])
+  difficulty?: string;
+
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
   page?: number = 1;

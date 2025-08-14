@@ -24,7 +24,7 @@ let TemplatesController = class TemplatesController {
         this.prisma = prisma;
     }
     async list(query) {
-        const { category, status, search, tags, industry, equipmentType, createdBy, isPublic, page = 1, limit = 20, sortBy = 'updatedAt', sortOrder = 'desc' } = query;
+        const { category, status, search, tags, industry, equipmentType, createdBy, isPublic, difficulty, page = 1, limit = 20, sortBy = 'updatedAt', sortOrder = 'desc' } = query;
         const where = {};
         if (category)
             where.category = category;
@@ -38,6 +38,8 @@ let TemplatesController = class TemplatesController {
             where.createdBy = createdBy;
         if (isPublic !== undefined)
             where.isPublic = isPublic;
+        if (difficulty)
+            where.difficulty = difficulty;
         if (search) {
             where.OR = [
                 { name: { contains: search, mode: 'insensitive' } },

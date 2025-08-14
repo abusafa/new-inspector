@@ -170,20 +170,36 @@ let TemplateBuilderService = class TemplateBuilderService {
         ];
     }
     async applyOperations(templateId, operations) {
-        const template = await this.prisma.inspectionTemplate.findUnique({
-            where: { id: templateId }
+        if (!templateId) {
+            throw new common_1.BadRequestException('Template ID is required');
+        }
+        if (!operations || !Array.isArray(operations) || operations.length === 0) {
+            throw new common_1.BadRequestException('At least one operation is required');
+        }
+        const template = await this.prisma.inspectionTemplate.findFirst({
+            where: { OR: [{ id: templateId }, { templateId }] }
         });
         if (!template) {
-            throw new common_1.BadRequestException('Template not found');
+            throw new common_1.BadRequestException(`Template with ID '${templateId}' not found`);
         }
         let schema = template.schemaJson && typeof template.schemaJson === 'object'
             ? { ...template.schemaJson }
-            : {};
-        for (const operation of operations) {
-            schema = this.applyOperation(schema, operation);
+            : this.getDefaultSchema(template.templateId, template.name);
+        if (!schema.items)
+            schema.items = [];
+        if (!schema.header_items)
+            schema.header_items = [];
+        try {
+            for (const operation of operations) {
+                this.validateOperation(operation);
+                schema = this.applyOperation(schema, operation);
+            }
+        }
+        catch (error) {
+            throw new common_1.BadRequestException(`Operation failed: ${error.message}`);
         }
         const updated = await this.prisma.inspectionTemplate.update({
-            where: { id: templateId },
+            where: { id: template.id },
             data: {
                 schemaJson: schema,
                 updatedAt: new Date()
@@ -227,29 +243,36 @@ let TemplateBuilderService = class TemplateBuilderService {
     }
     updateItem(schema, operation) {
         if (operation.targetId) {
-            this.updateItemById(schema.items, operation.targetId, operation.data);
+            this.updateItemById(schema.header_items || [], operation.targetId, operation.data);
+            this.updateItemById(schema.items || [], operation.targetId, operation.data);
         }
         return schema;
     }
     deleteItem(schema, operation) {
         if (operation.targetId) {
-            schema.items = this.removeItemById(schema.items, operation.targetId);
+            if (schema.header_items) {
+                schema.header_items = this.removeItemById(schema.header_items, operation.targetId);
+            }
+            schema.items = this.removeItemById(schema.items || [], operation.targetId);
         }
         return schema;
     }
     moveItem(schema, operation) {
         if (operation.targetId) {
-            const item = this.findAndRemoveItemById(schema.items, operation.targetId);
+            let item = this.findAndRemoveItemById(schema.items || [], operation.targetId);
+            if (!item && schema.header_items) {
+                item = this.findAndRemoveItemById(schema.header_items, operation.targetId);
+            }
             if (item) {
                 if (operation.parentId) {
-                    this.addItemToParent(schema.items, operation.parentId, item, operation.position);
+                    this.addItemToParent(schema.items || [], operation.parentId, item, operation.position);
                 }
                 else {
                     if (operation.position !== undefined) {
-                        schema.items.splice(operation.position, 0, item);
+                        (schema.items = schema.items || []).splice(operation.position, 0, item);
                     }
                     else {
-                        schema.items.push(item);
+                        (schema.items = schema.items || []).push(item);
                     }
                 }
             }
@@ -258,7 +281,10 @@ let TemplateBuilderService = class TemplateBuilderService {
     }
     duplicateItem(schema, operation) {
         if (operation.targetId) {
-            const item = this.findItemById(schema.items, operation.targetId);
+            let item = this.findItemById(schema.items || [], operation.targetId);
+            if (!item && schema.header_items) {
+                item = this.findItemById(schema.header_items, operation.targetId);
+            }
             if (item) {
                 const duplicatedItem = {
                     ...JSON.parse(JSON.stringify(item)),
@@ -267,14 +293,14 @@ let TemplateBuilderService = class TemplateBuilderService {
                 };
                 this.updateNestedItemIds(duplicatedItem);
                 if (operation.parentId) {
-                    this.addItemToParent(schema.items, operation.parentId, duplicatedItem, operation.position);
+                    this.addItemToParent(schema.items || [], operation.parentId, duplicatedItem, operation.position);
                 }
                 else {
                     if (operation.position !== undefined) {
-                        schema.items.splice(operation.position, 0, duplicatedItem);
+                        (schema.items = schema.items || []).splice(operation.position, 0, duplicatedItem);
                     }
                     else {
-                        schema.items.push(duplicatedItem);
+                        (schema.items = schema.items || []).push(duplicatedItem);
                     }
                 }
             }
@@ -311,6 +337,8 @@ let TemplateBuilderService = class TemplateBuilderService {
         }
     }
     removeItemById(items, targetId) {
+        if (!Array.isArray(items))
+            return [];
         return items.filter(item => {
             if (item.item_id === targetId) {
                 return false;
@@ -335,6 +363,8 @@ let TemplateBuilderService = class TemplateBuilderService {
         return null;
     }
     findAndRemoveItemById(items, targetId) {
+        if (!Array.isArray(items))
+            return null;
         for (let i = 0; i < items.length; i++) {
             if (items[i].item_id === targetId) {
                 return items.splice(i, 1)[0];
@@ -594,6 +624,81 @@ let TemplateBuilderService = class TemplateBuilderService {
         if (options.templateId)
             customized.template_id = options.templateId;
         return customized;
+    }
+    validateOperation(operation) {
+        if (!operation.type) {
+            throw new Error('Operation type is required');
+        }
+        const validOperations = ['add', 'update', 'delete', 'move', 'duplicate'];
+        if (!validOperations.includes(operation.type)) {
+            throw new Error(`Invalid operation type: ${operation.type}`);
+        }
+        switch (operation.type) {
+            case 'update':
+            case 'delete':
+            case 'move':
+            case 'duplicate':
+                if (!operation.targetId) {
+                    throw new Error(`${operation.type} operation requires targetId`);
+                }
+                break;
+            case 'add':
+                if (!operation.data) {
+                    throw new Error('Add operation requires data');
+                }
+                break;
+        }
+    }
+    getDefaultSchema(templateId, name) {
+        return {
+            template_id: templateId,
+            name: name,
+            description: "New inspection template",
+            header_items: [
+                {
+                    item_id: "item_header_001",
+                    type: "datetime",
+                    label: "Date and Time of Inspection",
+                    options: {
+                        required: true,
+                        default_to_current_time: true
+                    }
+                },
+                {
+                    item_id: "item_header_002",
+                    type: "text",
+                    label: "Inspector Name",
+                    options: {
+                        required: true
+                    }
+                }
+            ],
+            items: [
+                {
+                    item_id: "section_001",
+                    type: "section",
+                    label: "General Inspection",
+                    items: [
+                        {
+                            item_id: "question_001",
+                            type: "question",
+                            label: "Is the item in good condition?",
+                            options: {
+                                required: true
+                            },
+                            response_set: {
+                                type: "multiple-choice",
+                                responses: [
+                                    { id: "resp_yes", label: "Yes", score: 1, color: "green" },
+                                    { id: "resp_no", label: "No", score: 0, color: "red" },
+                                    { id: "resp_na", label: "N/A", score: null, color: "grey" }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        };
     }
 };
 exports.TemplateBuilderService = TemplateBuilderService;
